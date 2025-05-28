@@ -1,0 +1,16 @@
+{
+  "scopes": [],
+  "attributes": [],
+  "role-templates": [],
+  "authorities-inheritance": false,
+  "oauth2-configuration": {
+   "token-validity": 900,
+    "refresh-token-validity": 1800,
+    "redirect-uris": [
+      "https://*.applicationstudio.cloud.sap/**",
+      "https://*.us10-001.hana.ondemand.com/login/callback",
+      "https://*.cfapps.us10-001.hana.ondemand.com/**"
+    ],
+    "autoapprove": "true"
+  }
+}
