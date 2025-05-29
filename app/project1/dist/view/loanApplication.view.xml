@@ -1,0 +1,157 @@
+<mvc:View
+    controllerName="project1.controller.loanApplication"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:unified="sap.ui.unified"
+    xmlns:f="sap.ui.layout.form"
+    >
+    
+    <Page id="LApage" showHeader="true" enableScrolling="true" class="customPage">
+     <customHeader>
+      <Bar design="Header" class="box">
+      <contentLeft>
+      <Button id="homeLA" text="Home" press="onHome" class="mybuttonspacing"></Button>
+      </contentLeft>
+        <contentMiddle>
+        <Title text="Education Loan" class="headerTitleCentered" />
+        </contentMiddle>
+        <contentRight>
+          <Button id="logoutLA" text="Logout" press="onLogout" class="mybuttonspacing" />
+        </contentRight>
+      </Bar>
+    </customHeader>
+    
+    <content>
+    <Bar>
+    <contentLeft >
+    <Text text="Application Form" class="subHeader" />
+    </contentLeft>
+    </Bar>
+    </content>
+    
+     
+        <content>
+        
+
+            <f:SimpleForm class="center">
+            <FlexBox
+                id="LAflexbox"
+                direction="Row"
+                justifyContent="SpaceBetween"
+                fitContainer="true"
+                class="sapUiSmallMargin">
+                
+            <VBox class="formContainer" width="48%" >
+                <VBox class="customMargin">
+                <HBox  alignItems="Center">
+                    <Label id="LAlabel1" text="Enter Applicant Name" required="true"  class="customLabel"/>
+                    <Input id="enterApplicantName"   placeholder="Enter Applicant Name" liveChange=".nameValidation" class="customInput" />
+                </HBox>
+                </VBox>
+
+                <VBox class="customMargin">
+                <HBox alignItems="Center">
+                    <Label id="LAlabel2" text="Enter Applicant Address" required="true" class="customLabel" />
+                    <Input id="enterApplicantAddress" placeholder="Enter Applicant Address"  class="customInput" />
+                </HBox>
+                </VBox>
+                <VBox class="customMargin">
+                <HBox alignItems="Center">
+                    <Label id="LAlabel3" text="Enter Applicant Mobile No"  required="true" class="customLabel"/>
+                    <Input id="enterApplicantMobileNo" placeholder="Enter Applicant Mobile No" liveChange="numValidation" class="customInput"/>
+                </HBox>
+                </VBox>
+                <VBox class="customMargin">
+                <HBox alignItems="Center">
+                    <Label id="LAlabel4" text="Enter Applicant Email Id" required="true" class="customLabel"/>
+                    <Input id="enterEmailId" placeholder="Enter Applicant Email Id" liveChange="emailValidation"  class="customInput"/>
+                    </HBox>
+                </VBox>
+                <VBox class="customMargin">
+                <HBox alignItems="Center">
+                    <Label id="LAlabel5" text="Enter Aadhaar No" required="true" class="customLabel" />
+                    <Input id="enterAadhaarNo" placeholder="Enter Aadhaar No" liveChange="aadhaarValidation"  class="customInput" />
+                </HBox>
+                </VBox>
+                <VBox class="customMargin" id="LAbox3">
+                <VBox class="customMargin">
+                <HBox alignItems="Center">
+                    <Label text="Upload Documents" required="true" class="customLabel" />
+                    <ComboBox id="selectDocumentType" width="100%" placeholder="Select Document Type" class="customInput" >
+                    <items>
+                    <core:ListItem text="JPEG" />
+                    <core:ListItem text="JPG" />
+                    <core:ListItem text="PDF" />
+                    </items>                   
+                    </ComboBox>
+                </HBox>
+                </VBox>
+                <HBox alignItems="Center" >
+                    <Label text="Images or Documents (Upload below 2mb)" required="true" class="documentLabel"/>
+                    
+                    <VBox >
+                    <Button id="chooseFileButton" text="Choose a file..." width="100%" class="customButton" press=".onChooseFile"/>
+                    <Input id="filePath" visible="true" editable="false" />
+                    
+                    <Button id="uploadDocumentsButton" text="Upload Documents" type="Accept"  width="100%" class="customButton" press=".onUpload"/>
+                    <Input id="loanId" visible="false" /> 
+
+                    </VBox>
+                </HBox>
+                </VBox>
+                </VBox>
+
+                <VBox id="LAbox2" width="48%">
+                
+                <VBox class="customMargin">
+                <HBox alignItems="Center">
+                    <Label id="LAlabel6" text="Enter PAN No" required="true" class="customLabel"/>
+                    <Input id="enterPanNo" placeholder="Enter PAN No" liveChange="panValidation" class="customInput"/>
+                </HBox>
+                </VBox>
+
+                <VBox class="customMargin">
+                <HBox alignItems="Center">
+                    <Label id="LAlabel7" text="Enter Salary" required="true" class="customLabel"/>
+                    <Input id="enterSalary" placeholder="Enter Salary" liveChange="salaryValidation"  class="customInput"/>
+                </HBox>
+                </VBox>
+
+                <VBox class="customMargin">
+                <HBox alignItems="Center">
+                    <Label text="Enter Loan Amount" required="true" class="customLabel" />
+                    <Input id="enterloanamount" placeholder="Enter Loan Amount" liveChange="loanamountValidation"  class="customInput"/>
+                </HBox>
+                </VBox>
+
+                <VBox class="customMargin">
+                <HBox alignItems="Center">
+                    <Label id="LAlabel8" text="Enter Repayment Months" required="true" class="customLabel" />
+                    <Input id="enterloanrepaymentmonths" placeholder="Enter Loan Repayment Months" liveChange="repayValidation"  class="customInput"/>
+                </HBox>
+                </VBox>
+
+
+
+                
+                </VBox>
+
+                
+                </FlexBox>
+                
+            </f:SimpleForm>
+            
+        </content>
+        <footer>
+            <Toolbar id="LAtoolbar" class="sapUiSmallMargin">
+                <ToolbarSpacer id="LAtoolbarspacer" />
+                <Button id="LAbutton1" text="Submit" press="onSubmit" type="Emphasized" width="10%" class="customButton" />
+                <Button id="LAbutton2" text="Clear" press="onClear" type="Reject" width="10%" class="customButton" />
+                <ToolbarSpacer id="LAtoolbarspacer1" />
+            </Toolbar>
+        </footer>
+    </Page>
+</mvc:View>

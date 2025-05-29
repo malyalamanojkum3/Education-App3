@@ -1,0 +1,75 @@
+<mvc:View
+  controllerName="project1.controller.dashboard"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:f="sap.f"
+  xmlns:core="sap.ui.core">
+
+  <Page
+    id="dashboardPage"
+    title="Education Loan"
+    showHeader="true">
+
+    <customHeader>
+      <Bar design="Header" class="box">
+      <contentLeft>
+      </contentLeft>
+        <contentMiddle>
+        <Title text="Education Loan" class="headerTitleCentered" />
+        </contentMiddle>
+        <contentRight>
+          <Button id="logoutd" text="Logout" press="onLogout" class="mybuttonspacing" />
+        </contentRight>
+      </Bar>
+    </customHeader>
+
+    <content>
+      <f:GridList
+        id="gridDashboard"
+        items="{
+          path: '/tiles'
+        }"
+        growing="false"
+        class="sapUiMediumMargin dashboardGridLayout"
+        customLayout="f:GridContainerSettings">
+        
+        <f:GridListItem type="Active" press="onTilePress">
+          <VBox class="dashboardCard">
+            <customData>
+              <core:CustomData key="key" value="{key}" />
+            </customData>
+            <Avatar displaySize="L" src="{icon}" fallbackIcon="sap-icon://employee" />
+            <Text text="{title}" class="cardTitle" />
+            <Text text="{description}" class="cardDesc" wrapping="true" />
+          </VBox>
+        </f:GridListItem>
+      
+      </f:GridList>
+
+     <f:GridList
+        id="gridDashboard1"
+        items="{
+          path: '/tiles1'
+        }"
+        growing="false"
+        class="sapUiMediumMargin dashboardGridLayout"
+        customLayout="f:GridContainerSettings">
+        <f:GridContainerSettings gap="12233999999999rem"/>
+
+        
+
+        <f:GridListItem type="Active" press="onTilePress">
+          <VBox class="dashboardCard">
+            <customData>
+              <core:CustomData key="key" value="{key}" />
+            </customData>
+            <Avatar displaySize="L" src="{icon}" fallbackIcon="sap-icon://employee" />
+            <Text text="{title}" class="cardTitle" />
+            <Text text="{description}" class="cardDesc" wrapping="true" />
+          </VBox>
+        </f:GridListItem>
+
+      </f:GridList>
+    </content>
+  </Page>
+</mvc:View>

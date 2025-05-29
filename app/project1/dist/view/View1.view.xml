@@ -1,6 +1,57 @@
 <mvc:View controllerName="project1.controller.View1"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
+    <Page id="LoginPage" showHeader="false" class="sapUiContentPadding"  enableScrolling="false">
+        <content>
+            <HBox width="100%" height="100%" >
+            
+
+                <!-- image -->
+                    <VBox width="60%" class="imageContainer" alignItems="Center" justifyContent="Center">
+                   
+                        <Image src="images/Tiny students sitting near books getting university degree.jpg" width="100%" densityAware="false"/>  
+                             
+                    </VBox>
+                    <!-- login register box -->
+                    <VBox width="38%" alignItems="Center" justifyContent="Center">
+                        <VBox class="loginBox" >
+                            <VBox id="loginfields" >
+                                <Text text="Welcome back!" class="htext"/>
+                                <Text text="Login to your account" class="htext" />
+                                <Input id="emailinput" placeholder="Enter Email Id" class="inputem"/>
+                                <Input id="passinput" placeholder="Enter Password" type="Password" showValueHelp="true" valueHelpIconSrc="sap-icon://show" valueHelpRequest="onTogglePasswordVisibility" class="inputpass"/>
+                                <Button  text="Login" type="Emphasized" press="OnLoginbutton" />
+
+                                    <HBox height="1px" class="linebar"></HBox>
+                                        <HBox justifyContent="End">
+                                            <Text text="Don't have an account?"/>
+                                            <Link text="Sign Up" press="onSignup" class="Signuptext"/>
+        
+                                        </HBox>
+                            </VBox>
+                                <VBox id="signUpFields" visible="false">
+                                    <Text text="Start Your Journey" class="htextreg"/>
+                                    <Text text="Create your Education Loan account" class="htextreg" /> 
+                                    <Text text="Join thousands of students achieving their academic dreams with the right financial support" class="htextregsmall"/>
+
+                                    <Input placeholder="Enter your username" type="Text" class="inputn" />
+                                    <Input placeholder="Enter Mobile No." type="Number" class="inputn1"/>
+                                    <Input placeholder="Enter your email" type="Email" class="inputn1"/>
+    
+                                    <Input id="regpass" placeholder="Create a password" type="Password" class="inputn1" showValueHelp="true" valueHelpIconSrc="sap-icon://show" valueHelpRequest="onTogglePasswordVisibilityreg" />
+                                    <Input placeholder="Re-enter password" class="inputn1"/>
+                                    <Button text="Register" type="Emphasized" press="onRegister"/>
+                                    <HBox height="1px" class="linebar"></HBox>
+                                        <HBox justifyContent="End">
+                                            <Text text="Already have an account?"/>
+                                            <Link text="Login" press="onLogin" class="Logintext"/>
+        
+                                        </HBox>
+                                </VBox>
+                        </VBox>
+                    </VBox>
+    
+            </HBox>
+        </content>
     </Page>
 </mvc:View>

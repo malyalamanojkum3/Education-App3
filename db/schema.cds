@@ -1,16 +1,35 @@
-namespace my.App;
+namespace loanApp.db;
 
-entity employee {
-    key ID : Integer;
-    firstName : String(10);
-    lastName : String(10);
-    jobTitle : String;
-    companyId:Association to company;
-    salary : Decimal(10,2)
+type UserRole : String enum{
+   admin;
+   customer
 }
-
-entity company{
-    key ID:Integer;
-    companyName:String(20);
-    address:String(32);
+type LoanStatus : String enum{
+   Pending;
+   Approved;
+   Rejected;
 }
+ entity userDetails{
+    key Id : Integer;
+    email : String;
+    password: String;
+    username: String;
+    mobileNumber: String;
+    userRole: UserRole;
+    loans: Association to many loanDetails on loans.user = $self;
+ }
+ entity loanDetails{
+   key Id: String;
+   loanStatus : LoanStatus;
+   applicantName :String;
+   applicantAddress:String;
+   applicantPHno:String;
+   applicantEmail:String;
+   applicantAadhar:String;
+   applicantPAN:String;
+   applicantSalary:String;
+   loanAmount:String;
+   loanRepaymentMonths:String;
+   //document:String;
+   user: Association to userDetails;
+ }

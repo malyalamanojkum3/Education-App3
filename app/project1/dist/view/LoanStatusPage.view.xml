@@ -1,0 +1,126 @@
+<mvc:View controllerName="project1.controller.LoanStatusPage"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+ 
+    <Page id="LoanStatusPage" showHeader="true" enableScrolling="true" class="customPage">
+    <customHeader>
+      <Bar design="Header" class="box">
+       <contentLeft>
+       <Button id="homels" text="Home" press="onHome" class="mybuttonspacing"></Button>
+      </contentLeft>
+        <contentMiddle>
+        <Title text="Education Loan" textAlign="Center" class=" headerTitleCentered" ></Title>
+        </contentMiddle>
+        <contentRight>
+          <Button id="logoutLS" text="Logout" press="onLogout" class="mybuttonspacing"/>
+        </contentRight>
+      </Bar>
+    </customHeader>
+
+    <content>
+    <Bar>
+    <contentLeft >
+    <Text text="Loan Status" class="subHeader" />
+    </contentLeft>
+    </Bar>
+    </content>
+    
+                <VBox class="sapUiSmallMargin" justifyContent="Center" alignItems="Center" height="70%">
+                    <Image src="images/loanstatus.png" width="350px" height="200px" class="sapUiSmallMarginBottom" />
+                    <Label text="Welcome to the Loan Tracking Application" design="Bold" textAlign="Center"/>
+                    <Text text="Please enter your Loan Id  below to track your loan application."/>
+                    <Label width="150%"/>
+                    <Input id="Id" value="{ mainModel>/customer}" placeholder="Enter ID" textAlign="Center" required="false"/>
+                    <Button text="Track" press="onLoanStatusDetailsButton" class="PageButton"/>
+                </VBox>
+            </Page>
+ 
+<!--
+        <Page id="LoanStatus" title="Loan Details" titleAlignment="Center" class="sapUiContentPadding">
+        <VBox class="sapUiSmallMargin">
+        <f:Form id="FormDisplay480_12120Dual"
+            editable="false">
+            <f:layout>
+                <f:ResponsiveGridLayout
+                    labelSpanXL="4"
+                    labelSpanL="4"
+                    labelSpanM="12"
+                    labelSpanS="12"
+                    adjustLabelSpan="false"
+                    emptySpanXL="0"
+                    emptySpanL="0"
+                    emptySpanM="0"
+                    emptySpanS="0"
+                    columnsXL="2"
+                    columnsL="2"
+                    columnsM="2"
+                    singleContainerFullSize="false" />
+            </f:layout>
+                <f:FormContainer>
+                    <f:formElements>
+                        <f:FormElement label="Applicant Name">
+                            <f:fields>
+                                <Text text="Ram" id="nameText"  />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement label="Email">
+                            <f:fields>
+                                <Text text="{Email}" id="emailText" />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement label="Phone">
+                            <f:fields>
+                                <Text text="{Phone}" id="phoneText" />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement  label="Applicant Address">
+                            <f:fields>
+                                <Text text="{Street} {HouseNumber}" id="addressText" />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement label="Applicant Aadhar Number">
+                            <f:fields>
+                                <Text text="{AadharNumber}" id="aadharText" />
+                            </f:fields>
+                        </f:FormElement>
+                        </f:formElements>
+                        </f:FormContainer>
+                        <f:FormContainer>
+                        <f:formElements >
+                        <f:FormElement label="Loan Status">
+                            <f:fields>
+                                <Text text="{LoanStatus}" id="loanStatusText"/>
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement label="Applicant Date of Birth">
+                            <f:fields>
+                                <Text text="{DOB}"  id="dobText" />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement label="Applicant Loan ID">
+                            <f:fields>
+                                <Text text="{LoanID}" id="loanIdText" />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement label="Loan Amount">
+                            <f:fields>
+                                <Text text="{LoanAmount}" id="loanAmountText" />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement label="Applicant PAN Number">
+                            <f:fields>
+                                <Text text="{PANNumber}" id="panText" />
+                            </f:fields>
+                        </f:FormElement>
+                    </f:formElements>
+                </f:FormContainer>
+        </f:Form>
+    </VBox>
+    </Page>
+-->
+ 
+</mvc:View>
+ 

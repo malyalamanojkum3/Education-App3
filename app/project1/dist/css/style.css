@@ -1,1 +1,410 @@
-/* Enter your custom styles here */
+
+.headerTitle {
+    height: 3rem !important;
+    display: flex;
+     text-align: center;
+     justify-content: center;
+     margin-top: 1px;
+     margin-bottom: 1px;
+     font-size: 2rem;
+     font-style: normal;
+     background-color: darkblue;
+     color: rgb(251, 251, 251); /* Blue color */
+    }
+    
+  .mainToolBar{
+    background-color: #00264d ;
+  display: flex;
+  height: 2rem !important;
+  margin-top: 1px !important;
+     margin-bottom: 1px !important;
+     text-align: center;
+   justify-content: space-between;
+   align-items: center  
+  }
+  
+  .centeredTitles {
+     display: flex;
+     justify-content: center;
+    align-items: center;
+    }
+    
+    .smallSpacer {
+     width: 10px; /* Adjust this value to control the space between the titles */
+    }
+  
+      .pageContainer { 
+  margin: 0 auto; 
+  max-width: 1400px; 
+  padding: 10px 10px; 
+  margin-bottom: 30px !important;
+  box-sizing: border-box; 
+      font-style: normal;
+      background: white;   
+  height: 100vh !important; /* Full height of the viewport */
+   overflow: hidden; 
+  
+  }
+        
+        .title{
+          color: white !important;
+          font:100;
+          font-size: medium;
+          font-weight: bold;
+          margin: 2px !important;
+          padding: 2px !important;
+      }
+  
+   
+   .hoverableTitle {
+    transition: font-size 0.3s ease; /* Smooth transition for the font size change */
+  }
+  
+  .hoverableTitle:hover {
+    font-size: large;
+    font-weight: bold; 
+    color: #f8f7f7 !important; 
+  }
+  .enlargedTitle {
+    font-size: 1.5rem; 
+    font-weight: bold; 
+    color: #fcfbfb !important; 
+    transition: font-size 0.3s ease, color 0.3s ease; 
+  }
+  .customerDetails1{
+  
+    width: 600px;
+    height: fit-content;
+    background-color: #ffffff;
+    
+  }
+  
+  .font{
+    font-size: small;
+    color: black;
+    padding: 10px;
+  }
+    
+  .action {
+     display: flex;
+     justify-content: center; /* Center the content horizontally */
+    width: 100%; /* Ensure the HBox takes full width */
+    }
+    .font1{
+      font-size: large !important;
+      font-weight: bold !important;
+    font-family: 'Times New Roman', Times, serif !important;
+  
+    }
+    .gridLabel{
+      color: black;
+      padding: 5px;
+    }
+    .gridRow{
+      color: black;
+      padding: 5px;
+      margin: 3px;
+    }
+  
+  
+  .mybuttonspacing{
+      margin-right: 20px;
+  }
+  .customLabel1 {
+    width: 110px !important;
+    font-family: 'Times New Roman', Times, serif ;
+    font-size: medium;
+    font-weight: 600;
+   }
+   
+  .content {
+       width: 700px;
+    }
+    
+   .customInput1 {
+    font-family: 'Times New Roman', Times, serif ;
+    font-size: medium;
+    width: 220px !important;
+    box-sizing: border-box !important;
+  }
+  
+  .sapMDialog .sapMBar {
+       display: flex !important;
+       height: 2rem !important;
+       visibility: visible !important;
+       background-color: #00264d !important;
+    }
+    
+    .sapMDialog .sapMTitle {
+       font-size: 1rem !important;
+       font-style: normal;
+       font-family: 'Times New Roman', Times, serif ;
+       display: block !important;
+       font-weight: 600
+    }
+    
+  .sapMDialog .sapMBar .sapMTitle {
+       color: rgb(251, 250, 250) !important;
+    }
+    
+    
+  /* === Header Bar Styling === */
+  .box {
+    background-color: #00264d !important;
+    color: white !important;
+    
+  }
+  
+  .statusIcon {
+       margin-left: 0.5rem !important;
+       font-size: 1.2rem !important;
+        text-shadow: 0 0 1px currentColor !important
+    }
+    
+  .statusIcon[data-status="Approved"] {
+       color: rgb(3, 90, 3) !important;
+    }
+    
+    .statusIcon[data-status="Rejected"] {
+       color: red !important;
+    }
+    
+    .statusIcon[data-status="Pending"] {
+       color: rgb(225, 148, 3) !important;
+    }
+    
+    
+  
+  .box .sapMBarLeft,
+  .box .sapMBarRight,
+  .box .sapMBarMiddle{
+  text-align: center !important;
+  }
+  .box .sapMBtnInner {
+    color: white !important;
+  
+  }
+  
+  .box .sapMBtnInner {
+    background-color: transparent !important;
+  }
+  
+  /* === Loan Applocation Page CSS === */
+  .customInput {
+      width: 200% !important;
+  }
+  
+  .customInput .sapMInputBaseContentWrapper::placeholder {
+    color: black !important;
+    opacity: 1;
+  }
+  .customLabel {
+    width:180px;
+   }
+   .documentLabel{
+    margin-right: 10px;
+   }
+  .customMargin {
+    margin-bottom: 25px;
+  }
+  .formContainer {
+    margin-bottom: 25px;
+  }
+  
+  /* === Dashboard Grid Layout using CSS Grid === */
+  
+  
+  
+  .dashboardGridLayout {
+    display: grid;
+    width: 70%;
+    max-width: 1200px; /* Set a maximum width for the grid */
+    margin-right: 10;
+    box-sizing: border-box;
+  }
+  
+  .dashboardCard {
+    background-color: white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease;
+    height: 200px;
+    cursor: pointer;
+    margin: 0;
+  }
+  
+  
+  .dashboardCard:hover {
+    transform: translateY(-4px);
+    cursor: pointer;
+  }
+  
+  .cardTitle {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .cardDesc {
+    font-size: 0.85rem;
+    color: #555;
+    margin-top: 0.5rem;
+  }
+  
+  
+  /* === Profile Panel === */
+  .profilepanelheader .sapMBarMiddle {
+    justify-content: justify !important;
+    text-align: justify !important;
+  }
+  
+  .profileWrapper {
+    width: 600px;
+    height: fit-content;
+    margin: 2rem auto;
+    padding: 1rem;
+  }
+  
+  /* === Header Text White === */
+  .sapMBar .sapMTitle {
+    color: white !important;
+  }
+  
+  .headrtitle {
+    color: white !important;
+    word-spacing: 2;
+    text-align: center;
+  }
+  
+  
+  .dashboardCard:hover {
+    transform: translateY(-4px);
+    cursor: pointer;
+  }
+  
+  .cardTitle {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .cardDesc {
+    font-size: 0.85rem;
+    color: #555;
+    margin-top: 0.5rem;
+  }
+  
+  /* === Profile Panel === */
+  .profilepanelheader {
+    text-align: center;
+  }
+  
+  .profileWrapper {
+    width: 600px;
+    height: fit-content;
+    margin: 2rem auto;
+    padding: 1rem;
+  }
+  
+  /* === Header Text White === */
+  .sapMBar .sapMTitle {
+    color: white !important;
+  }
+  .headerTitleCentered {
+    width: 100%;
+    text-align: center;
+    
+    color: white;
+  }
+  /* === Common classes === */
+  .subHeader{
+    font-size: 20px;
+    color:#0070f2;
+    font-weight: bold;
+    margin-left: 20px;
+    margin-top: 5px;
+  }
+  
+  .actionbuttonspacing
+  {
+    margin-right: 10px;
+  }
+  
+  .sapMDlg {
+    min-width: 300px;
+    min-height: 200px;
+    max-width: 600px;
+    max-height: 400px;
+  }
+  
+  .workflowBox
+  {
+  margin-right: -394px;
+  }
+  
+  
+   
+  
+  
+  .htext{
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    margin: 0;
+    padding: 0;
+    
+  }
+  
+  .loginBox{
+    background-color: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+  }
+  
+  .inputem{
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .inputpass{
+    margin-bottom: 1rem !important;
+  }
+  
+  .linebar{
+    background-color: #818181; 
+    width: 100%; 
+    margin-top: 10px; 
+    margin-bottom: 10px;
+  }
+  
+  .htextreg{
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .htextregsmall{
+    font-weight: lighter;
+  
+  }
+  
+  .inputn{
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .inputn1{
+    margin-bottom: 1rem !important;
+  }
+  
+  .sapUiContentPadding{
+    background-color: white;
+  }

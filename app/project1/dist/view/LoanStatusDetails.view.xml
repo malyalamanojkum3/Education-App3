@@ -1,0 +1,154 @@
+<mvc:View
+    xmlns:cards="sap.f.cards"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    controllerName="project1.controller.LoanStatusDetails">
+  <Page
+      id="LoanStatusDetailsPage"
+      title="Loan Status"
+      titleLevel="H2"
+      class="sapUiContentPadding">
+    <headerContent>
+      <Button text="Back" press="onNavBack"/>
+    </headerContent>
+    <content>
+      <Title text="Application Status" level="H2" class="sapUiSmallMargin"/>
+      <VBox class="sapUiSmallMargin">
+        <f:Form id="LoanDetailsForm" editable="false">
+          <f:layout>
+            <f:ResponsiveGridLayout
+                labelSpanXL="4"
+                labelSpanL="4"
+                labelSpanM="12"
+                labelSpanS="12"
+                columnsXL="2"
+                columnsL="2"
+                columnsM="2"/>
+          </f:layout>
+          <f:formContainers>
+            <f:FormContainer>
+              <f:formElements>
+                <f:FormElement label="Applicant ID">
+                  <f:fields>
+                    <Text text="{mainModel>Id}"/>
+                  </f:fields>
+                </f:FormElement>
+                <f:FormElement label="Loan Status">
+                  <f:fields>
+                    <Text text="{mainModel>loanStatus}"/>
+                  </f:fields>
+                </f:FormElement>
+                <f:FormElement label="Applicant Name">
+                  <f:fields>
+                    <Text text="{mainModel>applicantName}"/>
+                  </f:fields>
+                </f:FormElement>
+                <f:FormElement label="Applicant Address">
+                  <f:fields>
+                    <Text text="{mainModel>applicantAddress}"/>
+                  </f:fields>
+                </f:FormElement>
+                <f:FormElement label="Phone Number">
+                  <f:fields>
+                    <Text text="{mainModel>applicantPHno}"/>
+                  </f:fields>
+                </f:FormElement>
+              </f:formElements>
+            </f:FormContainer>
+            <f:FormContainer>
+              <f:formElements>
+                <f:FormElement label="Applicant Email">
+                  <f:fields>
+                    <Text text="{mainModel>applicantEmail}"/>
+                  </f:fields>
+                </f:FormElement>
+                <f:FormElement label="Aadhar Number">
+                  <f:fields>
+                    <Text text="{mainModel>applicantAadhar}"/>
+                  </f:fields>
+                </f:FormElement>
+                <f:FormElement label="PAN Number">
+                  <f:fields>
+                    <Text text="{mainModel>applicantPAN}"/>
+                  </f:fields>
+                </f:FormElement>
+                <f:FormElement label="Applicant Salary">
+                  <f:fields>
+                    <Text text="{mainModel>applicantSalary}"/>
+                  </f:fields>
+                </f:FormElement>
+                <f:FormElement label="Loan Amount">
+                  <f:fields>
+                    <Text text="{mainModel>loanAmount}"/>
+                  </f:fields>
+                </f:FormElement>
+              </f:formElements>
+            </f:FormContainer>
+          </f:formContainers>
+        </f:Form>
+      </VBox>
+    </content>
+
+
+    <VBox>
+      <!-- Tracking Status Bar -->
+      <Title text="Loan Application Status" level="H2" textAlign="Center" class="sapUiSmallMargin"/>
+      <VBox width="70%" alignItems="Center">
+      <ProgressIndicator width="700%"
+          id="loanStatusProgress"
+          displayValue="{progressModel>/displayValue}"
+          percentValue="{progressModel>/percentValue}"
+          showValue="true"
+          state="{progressModel>/state}" />
+
+
+          <HBox justifyContent="Center" alignItems="Center" class="workflowBox" width="700%">
+ 
+  <!-- Submitted -->
+  <VBox alignItems="Center">
+    <core:Icon
+      src="sap-icon://upload"
+      size="{= ${mainModel>loanStatus} === 'Submitted' ? '2.5rem' : '3rem'}"
+      color="{= ${mainModel>loanStatus} === 'Submitted' ? '#0b74da' : '#cccccc'}"/>
+    <Text text="Submitted"/>
+  </VBox>
+ 
+   <core:Icon src="sap-icon://arrow-right" class="sapUiTinyMarginBegin sapUiTinyMarginEnd"
+  size="60px"
+  width="105px"
+  color="gray"></core:Icon>
+ 
+  <!-- In Progress -->
+  <VBox alignItems="Center">
+    <core:Icon
+      src="sap-icon://pending"
+      size="{= ${mainModel>loanStatus} === 'Pending' ? '2.5rem' : '3rem'}"
+      color="{= ${mainModel>loanStatus} === 'Pending' ? 'orange' : '#cccccc'}"/>
+    <Text text="In Progress"/>
+  </VBox>
+ 
+  <core:Icon src="sap-icon://arrow-right" class="sapUiTinyMarginBegin sapUiTinyMarginEnd"
+  size="70px"
+  width="105px"
+  color="gray"></core:Icon>
+ 
+ 
+<VBox alignItems="Center">
+ 
+<core:Icon src="{= ${mainModel>loanStatus} === 'Approved' ? 'sap-icon://verified' :  ${mainModel>loanStatus} === 'Rejected' ? 'sap-icon://notification' : 'sap-icon://question-mark'}"
+size="{= ${mainModel>loanStatus} === 'Approved' ? '3rem' : ${mainModel>loanStatus} === 'Rejected' ? '3rem': '3rem'}"
+color="{= ${mainModel>loanStatus} === 'Approved' ? 'green' : ${mainModel>loanStatus} === 'Rejected' ? 'red' : 'grey'}"/>
+<Text
+        text="{= ${mainModel>loanStatus} === 'Approved' ? 'Loan Approved' : ${mainModel>loanStatus} === 'Rejected' ? 'Loan Rejected' : 'Pending'}"
+    />
+</VBox>
+</HBox>
+ 
+
+
+      </VBox>
+    </VBox>
+  </Page>
+</mvc:View>

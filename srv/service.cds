@@ -1,6 +1,21 @@
-using { my.App as app } from '../db/schema';
+using { loanApp.db as db } from '../db/schema';
 
 service myService{
-    entity employee as projection on app.employee; 
-    entity company as projection on app.company;
+    entity customer as projection on db.loanDetails;
+    entity user as projection on db.userDetails;
+    action submitLoanApplication(
+        applicantName : String,
+        applicantAddress : String,
+        applicantPHno : String,
+        applicantEmail : String,
+        applicantAadhar : String,
+        applicantPAN : String,
+        applicantSalary : String,
+        loanAmount : String,
+        loanRepaymentMonths : String,
+        //document : String
+        ) returns { Id : String; };
+    action approveLoan( Id : String ) returns { Id: String; loanStatus: String; };
+    action rejectLoan( Id : String ) returns { Id: String; loanStatus: String; };
+    function trackLoan() returns array of {};
 }

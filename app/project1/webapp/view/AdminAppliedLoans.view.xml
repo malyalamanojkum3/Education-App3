@@ -1,0 +1,225 @@
+<mvc:View xmlns:f="sap.f" xmlns:table="sap.ui.table" controllerName="project1.controller.AdminAppliedLoans"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    displayBlock="true"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form">
+    <Page id ="appliedLoans" showHeader="true" enableScrolling="true" class="customPage">
+    <customHeader>
+      <Bar design="Header" class="box">
+      <contentLeft>
+      <Button  text="Home" press="onHome" class="mybuttonspacing"></Button>
+      </contentLeft>
+        <contentMiddle>
+        <Title text="Education Loan" class="headerTitleCentered" />
+        </contentMiddle>
+        <contentRight>
+          <Button  text="Logout" press="onLogout" class="mybuttonspacing" />
+        </contentRight>
+      </Bar>
+    </customHeader>
+    <content>
+    <Bar>
+    <contentLeft >
+    <Text text="Applied Loans" class="subHeader" />
+    </contentLeft>
+    <contentRight>
+    <OverflowToolbar id="filtersbar">
+ 
+<ComboBox id="statusComboBox" selectedKey="All" change="onStatusChange">
+ <core:Item key="All" text="All" />
+ <core:Item key="Approved" text="Approved Loans" />
+ <core:Item key="Pending" text="Pending Loans" />
+ <core:Item key="Rejected" text="Rejected Loans" />
+ </ComboBox>
+						<ToolbarSpacer/>
+						<SearchField id ="querySearch" liveChange="onSearch">
+							<layoutData>
+							<OverflowToolbarLayoutData maxWidth="300px" shrinkable="true" priority="NeverOverflow"/></layoutData>
+						</SearchField>
+						<Button text="Reset" type="Transparent" press="onReset"/>
+						<OverflowToolbarButton tooltip="Sort" type="Transparent" text="Sort" icon="sap-icon://sort" press="onSort"/>
+						<OverflowToolbarButton tooltip="Group" id="GroupBy" type="Transparent" text="Group" icon="sap-icon://group-2" press="onGroup"/>
+						<OverflowToolbarMenuButton tooltip="Export" type="Transparent" text="Export" buttonMode="Split" icon="sap-icon://share" defaultAction="onDefaultActionAccept" beforeMenuOpen="onBeforeMenuOpen" useDefaultActionOnly="true">
+							<menu>
+								<Menu itemSelected="onMenuAction">
+									<MenuItem text="Export as PDF" icon="sap-icon://pdf-attachment" />
+									<MenuItem text="Export to Excel" icon="sap-icon://excel-attachment" />
+								</Menu>
+							</menu>
+						</OverflowToolbarMenuButton>
+					</OverflowToolbar>
+    </contentRight>
+    </Bar>
+    
+    </content>
+    <VBox id="_IDGenVBox" class="pageContainer" fitContainer="true">
+        <ScrollContainer id="scrollContainer" height="100%" width="100%" vertical="true" visible="true">
+            <Table id="loanList" items="{mainModel>/customer}" class="table" noDataText="No Data Available">
+                <columns>
+                    <Column id="_IDGenColumn">
+                        <Text id="_IDGenText" text="ID" class="font1"/>
+                    </Column>
+                    <Column id="_IDGenColumn1">
+                        <Text id="_IDGenText1" text="Name" class="font1"/>
+                    </Column>
+                    <Column id="_IDGenColumn11">
+                        <Text id="_IDGenText112" text="Email" class="font1"/>
+                    </Column>
+                    <Column id="_IDGenColumn111">
+                        <Text id="_IDGenText1111" text="MobileNo" class="font1"/>
+                    </Column>
+                    <Column>
+                        <Text  text="Aadhar Number" class="font1"/>
+                    </Column>
+                    <Column>
+    <Text text="Status" class="font1"/>
+</Column>
+                    <Column id="_IDGenColumn3" hAlign="Center">
+                        <Text id="_IDGenText3" text="Actions" class="action font1"/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem id="_IDGenColumnListItem1">
+                        <cells>
+                            <Text id="_IDGenText4" text="{mainModel>Id}" width="150px"/>
+                            <Text id="_IDGenText5" text="{mainModel>applicantName}" />
+                            <Text id="_IDGenText6" text="{mainModel>applicantEmail}" width="150px" />
+                            <Text id="_IDGenText77" text="{mainModel>applicantPHno}"/>
+                            <Text id="_IDGenText78" text="{mainModel>applicantAadhar}"/>
+                           
+<HBox>
+     <Text text="{mainModel>loanStatus}" /> 
+    <core:Icon
+    src="{= ${mainModel>loanStatus} === 'Approved' ? 'sap-icon://accept' : ${mainModel>loanStatus} === 'Rejected' ? 'sap-icon://decline' : 'sap-icon://alert'}"
+    size="1rem"
+    class="statusIcon">
+    <core:customData>
+        <core:CustomData key="status" value="{mainModel>loanStatus}" writeToDom="true" />
+    </core:customData>
+</core:Icon>
+
+</HBox>
+<HBox id="_IDGenHBox" class="action">
+     <Button type="Default" text="View" press="onViewDetails" class="actionbuttonspacing"/>
+     
+ </HBox>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </ScrollContainer>
+    </VBox>
+    </Page>
+    
+
+<Dialog id="customerDetailsDialog" 
+class="content"
+>
+     <customHeader>
+     <Bar>
+     
+<contentLeft>
+     <Label text="" width="100px" /> <!-- Spacer -->
+     </contentLeft>
+     <contentMiddle>
+     <ToolbarSpacer/>
+     <Title text="CUSTOMER LOAN DETAILS" />
+     <ToolbarSpacer/>
+     </contentMiddle>
+     <contentRight>
+     <Label text="" width="100px" /> <!-- Spacer -->
+     </contentRight>
+     </Bar>
+     </customHeader>
+
+        <content>
+        
+        <HBox >
+        <Label text="" width="40px" /> <!-- Spacer -->
+            <VBox >
+            <HBox>
+            <HBox>
+                    <Label text="ID:"  class="font customLabel1"/>
+                    <Text text="{mainModel>Id}" class="font customInput1"/>
+                    </HBox>
+                    <HBox>
+                    <Label  text="Name:" class="font customLabel1" />
+                    <Text text="{mainModel>applicantName}" class="font customInput1"/>
+</HBox>
+</HBox>
+<HBox>
+                    <HBox>
+                    <Label  text="Email:" class="font customLabel1"/>
+                    <Text  text="{mainModel>applicantEmail}" class="font customInput1"/>
+              </HBox>
+                    <HBox>
+                    <Label text="Mobile:" class="font customLabel1" />
+                    <Text text="{mainModel>applicantPHno}" class="font customInput1" />
+                </HBox>
+                </HBox>
+    <HBox>
+                    <HBox>
+                    <Label text="Aadhar No.:"  class="font customLabel1" />
+                    <Text text="{mainModel>applicantAadhar}" class="font customInput1"/>
+                </HBox>
+                    <HBox>
+                    <Label text="PAN No.:" class="font customLabel1" />
+                    <Text text="{mainModel>applicantPAN}" class="font customInput1"/>
+                </HBox>
+                </HBox>
+                    <HBox>
+                    <HBox>
+                    <Label text="Salary:" class="font customLabel1"/>
+                    <Text text="₹{mainModel>applicantSalary}.00" class="font customInput1" />
+                </HBox>
+                    <HBox>
+                    <Label text="Tenure:" class="font customLabel1"/>
+                    <Text text="{mainModel>loanRepaymentMonths} Months" class="font customInput1" />
+              </HBox>
+              </HBox>
+                    <HBox>
+                    <HBox>
+                    <Label text="Principal:" class="font customLabel1" />
+                    <Text text="₹{mainModel>loanAmount}.00" class="font customInput1"/>
+                </HBox>
+                <HBox>
+                    <Label text="Loan Status:" class="font customLabel1" />
+                    <Text text="{mainModel>loanStatus}" class="font customInput1"/>
+                </HBox>
+                </HBox>
+                 <HBox>
+                 
+                <HBox>
+                    <Label  text="Address:" class="font customLabel1"/>
+                    <Text  text="{mainModel>applicantAddress}" class="font customInput1" />
+               </HBox>
+               <!-- <HBox>
+           <Label text="Documents:" class="font customLabel1"/>
+     <VBox>
+         <List items="{mainModel>document}">
+     <StandardListItem
+     title="{mainModel>applicantName}"
+     icon="sap-icon://attachment"
+     type="Active"
+     press="onDocumentPress"
+     />
+ </List>
+     </VBox>
+</HBox> -->
+               </HBox>
+                </VBox>
+                
+                </HBox>
+        </content>
+     <buttons>
+     <Button type="Accept" text="Accept" press="onApproveLoan"
+    visible="{path: 'mainModel>loanStatus', formatter: '.isPending', targetType: 'any' }"
+    class="actionbuttonspacing"/>  
+<Button type="Reject" text="Reject" press="onRejectLoan"
+    visible="{path: 'mainModel>loanStatus', formatter: '.isPending',  targetType: 'any' }"
+    class="actionbuttonspacing"/>
+<Button text="Close" press="onCloseDialog" />
+</buttons>
+    </Dialog>
+</mvc:View>
