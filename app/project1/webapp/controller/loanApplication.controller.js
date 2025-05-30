@@ -7,15 +7,7 @@ sap.ui.define([
     "use strict";
 
     return Controller.extend("project1.controller.loanApplication", {
-      onInit() {
-
-        // Initialize the model
-        var oModel = new JSONModel("odata/v2/my/customer");
-        this.getView().setModel(oModel);
-        
-        
       
-    },
     onAfterRendering: function () {
       const aInputs = [
           "enterApplicantName",
@@ -60,18 +52,6 @@ sap.ui.define([
           var ApplicantSalary = this.getView().byId("enterSalary").getValue();
           var ApplicantLoanAmount = this.getView().byId("enterloanamount").getValue();
           var ApplicantRepaymentMonths = this.getView().byId("enterloanrepaymentmonths").getValue();
-
-          //log the captured data for debugging
-          console.log("Applicant Name:", ApplicantName);
-          console.log("Applicant Address:", ApplicantAddress);
-          console.log("Applicant Mobile No:", ApplicantMobileNo);
-          console.log("Applicant Email Id:", ApplicantEmailId);
-          console.log("Aadhaar No:", ApplicantAadhaarNo);
-          console.log("PAN No:", ApplicantPANNo);
-          console.log("Salary:", ApplicantSalary);
-          console.log("Loan Amount:", ApplicantLoanAmount);
-          console.log("Loan Repayment Months:", ApplicantRepaymentMonths);
-
 
           //validation formats
           var nameFormat = /^[a-zA-Z\s]+$/;
@@ -138,34 +118,29 @@ sap.ui.define([
             //document: this.filebase64String,
           };
           //posting data
-          $.ajax({
-            url: "/odata/v2/my/submitLoanApplication",
+          var oModel=this.getView().getModel("mainModel");
+          oModel.callFunction("/submitLoanApplication",{
             method: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(NewUser),
+            urlParameters: NewUser,
             success: (data) => {
               sap.ui.core.BusyIndicator.hide(0);
-              
-              MessageBox.success("You have applied for loan successfully\nYour loan id:"+ data.Id, {
-
+              MessageBox.success("You have applied for loan successfully\nYour loan id:"+ data.submitLoanApplication.Id, {
                 onClose: () => {
                   this.byId("enterApplicantName").setValue("");
-            this.byId("enterApplicantAddress").setValue("");
-            this.byId("enterApplicantMobileNo").setValue("");
-            this.byId("enterEmailId").setValue("");
-            this.byId("enterAadhaarNo").setValue("");
-            this.byId("enterPanNo").setValue("");
-            this.byId("enterSalary").setValue("");
-            this.byId("enterloanamount").setValue("");
-            this.byId("enterloanrepaymentmonths").setValue("");
-            
-
-            //navigate
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("dashboard");
-            }
-            });
-            },
+                  this.byId("enterApplicantAddress").setValue("");
+                  this.byId("enterApplicantMobileNo").setValue("");
+                  this.byId("enterEmailId").setValue("");
+                  this.byId("enterAadhaarNo").setValue("");
+                  this.byId("enterPanNo").setValue("");
+                  this.byId("enterSalary").setValue("");
+                  this.byId("enterloanamount").setValue("");
+                  this.byId("enterloanrepaymentmonths").setValue("");
+                  //navigate
+                  var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                  oRouter.navTo("dashboard");
+                  }
+                  });
+                  },
             error: (error) => {
               MessageToast.show("Error submitting: " + error.responseText);
             }
