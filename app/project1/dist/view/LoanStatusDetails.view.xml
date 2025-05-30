@@ -32,27 +32,27 @@
               <f:formElements>
                 <f:FormElement label="Applicant ID">
                   <f:fields>
-                    <Text text="{mainModel>Id}"/>
+                    <Text text="{loanDetailModel>Id}"/>
                   </f:fields>
                 </f:FormElement>
                 <f:FormElement label="Loan Status">
                   <f:fields>
-                    <Text text="{mainModel>loanStatus}"/>
+                    <Text text="{loanDetailModel>loanStatus}"/>
                   </f:fields>
                 </f:FormElement>
                 <f:FormElement label="Applicant Name">
                   <f:fields>
-                    <Text text="{mainModel>applicantName}"/>
+                    <Text text="{loanDetailModel>applicantName}"/>
                   </f:fields>
                 </f:FormElement>
                 <f:FormElement label="Applicant Address">
                   <f:fields>
-                    <Text text="{mainModel>applicantAddress}"/>
+                    <Text text="{loanDetailModel>applicantAddress}"/>
                   </f:fields>
                 </f:FormElement>
                 <f:FormElement label="Phone Number">
                   <f:fields>
-                    <Text text="{mainModel>applicantPHno}"/>
+                    <Text text="{loanDetailModel>applicantPHno}"/>
                   </f:fields>
                 </f:FormElement>
               </f:formElements>
@@ -61,27 +61,27 @@
               <f:formElements>
                 <f:FormElement label="Applicant Email">
                   <f:fields>
-                    <Text text="{mainModel>applicantEmail}"/>
+                    <Text text="{loanDetailModel>applicantEmail}"/>
                   </f:fields>
                 </f:FormElement>
                 <f:FormElement label="Aadhar Number">
                   <f:fields>
-                    <Text text="{mainModel>applicantAadhar}"/>
+                    <Text text="{loanDetailModel>applicantAadhar}"/>
                   </f:fields>
                 </f:FormElement>
                 <f:FormElement label="PAN Number">
                   <f:fields>
-                    <Text text="{mainModel>applicantPAN}"/>
+                    <Text text="{loanDetailModel>applicantPAN}"/>
                   </f:fields>
                 </f:FormElement>
                 <f:FormElement label="Applicant Salary">
                   <f:fields>
-                    <Text text="{mainModel>applicantSalary}"/>
+                    <Text text="{loanDetailModel>applicantSalary}"/>
                   </f:fields>
                 </f:FormElement>
                 <f:FormElement label="Loan Amount">
                   <f:fields>
-                    <Text text="{mainModel>loanAmount}"/>
+                    <Text text="{loanDetailModel>loanAmount}"/>
                   </f:fields>
                 </f:FormElement>
               </f:formElements>
@@ -110,8 +110,8 @@
   <VBox alignItems="Center">
     <core:Icon
       src="sap-icon://upload"
-      size="{= ${mainModel>loanStatus} === 'Submitted' ? '2.5rem' : '3rem'}"
-      color="{= ${mainModel>loanStatus} === 'Submitted' ? '#0b74da' : '#cccccc'}"/>
+      size="{= ${loanDetailModel>loanStatus} === 'Submitted' ? '2.5rem' : '3rem'}"
+      color="{= ${loanDetailModel>loanStatus} === 'Submitted' ? '#0b74da' : '#cccccc'}"/>
     <Text text="Submitted"/>
   </VBox>
  
@@ -124,8 +124,8 @@
   <VBox alignItems="Center">
     <core:Icon
       src="sap-icon://pending"
-      size="{= ${mainModel>loanStatus} === 'Pending' ? '2.5rem' : '3rem'}"
-      color="{= ${mainModel>loanStatus} === 'Pending' ? 'orange' : '#cccccc'}"/>
+      size="{= ${loanDetailModel>loanStatus} === 'Pending' ? '2.5rem' : '3rem'}"
+      color="{= ${loanDetailModel>loanStatus} === 'Pending' ? 'orange' : '#cccccc'}"/>
     <Text text="In Progress"/>
   </VBox>
  
@@ -137,11 +137,11 @@
  
 <VBox alignItems="Center">
  
-<core:Icon src="{= ${mainModel>loanStatus} === 'Approved' ? 'sap-icon://verified' :  ${mainModel>loanStatus} === 'Rejected' ? 'sap-icon://notification' : 'sap-icon://question-mark'}"
-size="{= ${mainModel>loanStatus} === 'Approved' ? '3rem' : ${mainModel>loanStatus} === 'Rejected' ? '3rem': '3rem'}"
-color="{= ${mainModel>loanStatus} === 'Approved' ? 'green' : ${mainModel>loanStatus} === 'Rejected' ? 'red' : 'grey'}"/>
+<core:Icon src="{= ${loanDetailModel>loanStatus} === 'Approved' ? 'sap-icon://verified' :  ${loanDetailModel>loanStatus} === 'Rejected' ? 'sap-icon://notification' : 'sap-icon://question-mark'}"
+size="{= ${loanDetailModel>loanStatus} === 'Approved' ? '3rem' : ${loanDetailModel>loanStatus} === 'Rejected' ? '3rem': '3rem'}"
+color="{= ${loanDetailModel>loanStatus} === 'Approved' ? 'green' : ${loanDetailModel>loanStatus} === 'Rejected' ? 'red' : 'grey'}"/>
 <Text
-        text="{= ${mainModel>loanStatus} === 'Approved' ? 'Loan Approved' : ${mainModel>loanStatus} === 'Rejected' ? 'Loan Rejected' : 'Pending'}"
+        text="{= ${loanDetailModel>loanStatus} === 'Approved' ? 'Loan Approved' : ${loanDetailModel>loanStatus} === 'Rejected' ? 'Loan Rejected' : 'Pending'}"
     />
 </VBox>
 </HBox>

@@ -27,27 +27,28 @@ sap.ui.define([
        
         _loadCustomerDetails: function(sCustomerId) {
             var oMainModel = this.getView().getModel("mainModel");
-            var sPath = "/customer('" + sCustomerId + "')";
-           
-            // Bind the view to the selected customer's data and attach an event handler for data reception.
-            this.getView().bindElement({
-                path: sPath,
-                model: "mainModel",
-                parameters: {
-                    expand: "LoanDetails"
+            oMainModel.callFunction("/trackLoan", {
+                method: "GET",
+                urlParameters: {
+                    Id: sCustomerId
                 },
-                events: {
-                    dataReceived: this._onDataReceived.bind(this)
+                success: function(oData) {
+                    var oResult = (oData &&  oData.results && oData.results[0]) ? oData.results[0] : {};
+                    var oJsonModel = new sap.ui.model.json.JSONModel(oResult);
+                    this.getView().setModel(oJsonModel, "loanDetailModel");
+                    this.getView().setBindingContext(oJsonModel.createBindingContext("/"), "loanDetailModel");
+                    this._onDataReceived(); 
+                }.bind(this),
+                error: function(oError) {
+                    sap.m.MessageToast.show("Failed to load loan details.");
                 }
             });
         },
        
         _onDataReceived: function() {
-            var oContext = this.getView().getBindingContext("mainModel");
-            if (!oContext) {
-                return;
-            }
-            var oData = oContext.getObject();
+            // Get the data directly from the model
+            var oModel = this.getView().getModel("loanDetailModel");
+            var oData = oModel ? oModel.getData() : {};
             var sLoanStatus = oData.loanStatus; // Expected values: "Submitted", "Pending", "Approved", "Rejected"
            
             var oProgressModel = this.getView().getModel("progressModel");

@@ -9,7 +9,7 @@
                 <!-- image -->
                     <VBox width="60%" class="imageContainer" alignItems="Center" justifyContent="Center">
                    
-                        <Image src="images/Tiny students sitting near books getting university degree.jpg" width="100%" densityAware="false"/>  
+                        <Image src="images/loginPage.jpg" width="100%" densityAware="false"/>  
                              
                     </VBox>
                     <!-- login register box -->

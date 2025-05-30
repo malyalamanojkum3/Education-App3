@@ -3,7 +3,7 @@ sap.ui.define([
     "sap/m/MessageToast",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
-    "sap/ui/model/odata/v4/ODataModel",
+    "sap/ui/model/odata/v2/ODataModel",
     
     
 ], function (Controller, MessageToast, Filter,FilterOperator,ODataModel) {
@@ -27,49 +27,50 @@ sap.ui.define([
 
         onApproveLoan: function () {
             sap.ui.core.BusyIndicator.show(0);
+        
             var oDialog = this.byId("customerDetailsDialog");
             var oContext = oDialog.getBindingContext("mainModel");
             var oModel = this.getView().getModel("mainModel");
             var oData = oContext.getObject();
         
-            jQuery.ajax({
-                url: "/odata/v4/my/approveLoan",
-                method: "POST",
-                data: JSON.stringify({Id: oData.Id}),
-                contentType: "application/json",
-                success: () => {
-                    
+            oModel.callFunction("/approveLoan", {
+                method: "POST", 
+                urlParameters: { Id : oData.Id},
+                success: function () {
+                    sap.ui.core.BusyIndicator.hide(); 
                     oModel.refresh();
                     MessageToast.show("Loan Approved");
-                    oDialog.close(sap.ui.core.BusyIndicator.hide());
-                   
+                    oDialog.close();
                 },
-                error: () => {
+                error: function () {
+                    sap.ui.core.BusyIndicator.hide(); 
                     MessageToast.show("Error Approving Loan");
-                }
+                },
             });
-        },        
+        },
+             
 
         onRejectLoan: function () {
             sap.ui.core.BusyIndicator.show(0);
+        
             var oDialog = this.byId("customerDetailsDialog");
             var oContext = oDialog.getBindingContext("mainModel");
             var oModel = this.getView().getModel("mainModel");
             var oData = oContext.getObject();
         
-            jQuery.ajax({
-                url: "/odata/v4/my/rejectLoan",
-                method: "POST",
-                data: JSON.stringify({Id: oData.Id}),
-                contentType: "application/json",
-                success: () => {
+            oModel.callFunction("/rejectLoan", {
+                method: "POST", 
+                urlParameters: { Id : oData.Id},
+                success: function () {
+                    sap.ui.core.BusyIndicator.hide(); 
                     oModel.refresh();
                     MessageToast.show("Loan Rejected");
-                    oDialog.close(sap.ui.core.BusyIndicator.hide());
+                    oDialog.close();
                 },
-                error: () => {
+                error: function () {
+                    sap.ui.core.BusyIndicator.hide(); 
                     MessageToast.show("Error Rejecting Loan");
-                }
+                },
             });
         },
         onLogout: function () {
