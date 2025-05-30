@@ -10,7 +10,7 @@ sap.ui.define([
       onInit() {
 
         // Initialize the model
-        var oModel = new JSONModel("odata/v4/my/customer");
+        var oModel = new JSONModel("odata/v2/my/customer");
         this.getView().setModel(oModel);
         
         
@@ -139,7 +139,7 @@ sap.ui.define([
           };
           //posting data
           $.ajax({
-            url: "/odata/v4/my/submitLoanApplication",
+            url: "/odata/v2/my/submitLoanApplication",
             method: "POST",
             contentType: "application/json",
             data: JSON.stringify(NewUser),

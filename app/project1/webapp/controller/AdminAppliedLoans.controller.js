@@ -3,7 +3,7 @@ sap.ui.define([
     "sap/m/MessageToast",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
-    "sap/ui/model/odata/v4/ODataModel",
+    "sap/ui/model/odata/v2/ODataModel",
     
     
 ], function (Controller, MessageToast, Filter,FilterOperator,ODataModel) {
@@ -33,7 +33,7 @@ sap.ui.define([
             var oData = oContext.getObject();
         
             jQuery.ajax({
-                url: "/odata/v4/my/approveLoan",
+                url: "/odata/v2/my/approveLoan",
                 method: "POST",
                 data: JSON.stringify({Id: oData.Id}),
                 contentType: "application/json",
@@ -58,7 +58,7 @@ sap.ui.define([
             var oData = oContext.getObject();
         
             jQuery.ajax({
-                url: "/odata/v4/my/rejectLoan",
+                url: "/odata/v2/my/rejectLoan",
                 method: "POST",
                 data: JSON.stringify({Id: oData.Id}),
                 contentType: "application/json",

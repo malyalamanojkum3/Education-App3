@@ -12,7 +12,9 @@ sap.ui.define([
             var sCustomerId = oInput.getValue();
  
             if (sCustomerId) {
+                sap.ui.core.BusyIndicator.show(0);
                 this._isValidCustomerId(sCustomerId).then(function(isValid) {
+                    sap.ui.core.BusyIndicator.hide(0);
                     if (isValid) {
                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                         oRouter.navTo("LoanStatusDetails", {
@@ -23,18 +25,24 @@ sap.ui.define([
                     }
                 }.bind(this));
             } else {
-                MessageToast.show("Please enter a valid Customer ID.");
+                MessageToast.show("Please enter Customer ID.");
             }
             this.byId("Id").setValue("");
         },
         _isValidCustomerId: function(sCustomerId) {
             var oModel = this.getView().getModel("mainModel");
             return new Promise(function(resolve, reject) {
-                var oBindingContext = oModel.bindContext("/trackLoan('" + sCustomerId + "')");
-                oBindingContext.requestObject().then(function(oData) {
-                    resolve(!!oData);
-                }).catch(function() {
-                    resolve(false);
+                oModel.callFunction("/trackLoan", {
+                    method: "GET",
+                    urlParameters: {
+                        Id: sCustomerId
+                    },
+                    success: function(oData) {
+                        resolve(!!oData);
+                    },
+                    error: function() {
+                        resolve(false);
+                    }
                 });
             });
         },
