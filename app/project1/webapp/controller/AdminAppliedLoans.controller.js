@@ -314,27 +314,42 @@ onIdListSearch: function() {
         sap.m.MessageToast.show("Please enter at least one ID.");
         return;
     }
-    // Split by comma, space, or semicolon
-    var aIds = sValue.split(/[,;\s]+/).map(function(id) { return id.trim(); }).filter(Boolean);
+    // Split by comma, space, semicolon, or newline
+    var aIds = sValue.split(/[,;\s\n]+/).map(function(id) { return id.trim(); }).filter(Boolean);
     if (aIds.length === 0) {
         sap.m.MessageToast.show("No valid IDs entered.");
         return;
     }
-    var aFilters = aIds.map(function(id) {
-        return new sap.ui.model.Filter("Id", sap.ui.model.FilterOperator.EQ, id);
+    var that = this;
+    var oModel = this.getView().getModel("mainModel");
+    sap.ui.core.BusyIndicator.show(0);
+    oModel.callFunction("/fetchLoansByIds", {
+        method: "POST",
+        urlParameters: { Ids: aIds },
+        success: function(oData) {
+            sap.ui.core.BusyIndicator.hide();
+            // Bind the table to the OData V2 action response (d.results)
+            var aResults = oData.results || [];
+            console.log("Fetched results:", aResults.length);
+            var oResultModel = new sap.ui.model.json.JSONModel({ results: aResults });
+            that.byId("loanList").setModel(oResultModel, "mainModel");
+            that.byId("loanList").bindItems({
+                path: "mainModel>/results",
+                template: that.byId("loanList").getBindingInfo("items").template
+            });
+            sap.m.MessageToast.show("Fetched " + aResults.length + " applications.");
+        },
+        error: function() {
+            sap.ui.core.BusyIndicator.hide();
+            sap.m.MessageToast.show("Error fetching applications.");
+        }
     });
-    var oTable = this.byId("loanList");
-    var oBinding = oTable.getBinding("items");
-    oBinding.filter(new sap.ui.model.Filter({
-        filters: aFilters,
-        and: false
-    }));
-    // Close the dialog after filtering
+    // Close the dialog and clear input
     var oDialog = this.byId("idFilterDialog");
     if (oDialog) {
         oDialog.close();
     }
-    this.byId("idListInput").setValue(""); // Clear input field
+    oInput.setValue("");
 },
 onOpenIdFilterDialog: function() {
     var oDialog = this.byId("idFilterDialog");

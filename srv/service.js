@@ -59,5 +59,16 @@ module.exports = cds.service.impl(function(){
           return req.error(404, `Loan application with Id ${Id} not found.`);
         }
         return result;
+      }),
+
+      this.on("fetchLoansByIds", async (req) => {
+        const { Ids } = req.data;
+        if (!Ids || !Array.isArray(Ids) || Ids.length === 0) {
+          return [];
+        }
+        const result = await cds.tx(req).run(
+          SELECT.from(customer).where({ Id: { in: Ids } })
+        );
+        return result;
       })
     })

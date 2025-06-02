@@ -18,4 +18,5 @@ service myService{
     action approveLoan( Id : String ) returns { Id: String; loanStatus: String; };
     action rejectLoan( Id : String ) returns { Id: String; loanStatus: String; };
     function trackLoan( Id : String ) returns array of {};
+    action fetchLoansByIds(Ids: array of String) returns array of customer;
 }
