@@ -48,7 +48,7 @@ sap.ui.define([
         },
         onLogout: function () {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("main");
+            oRouter.navTo("RouteView1");
             MessageToast.show("Logged out!");
             this.byId("Id").setValue("");
         },

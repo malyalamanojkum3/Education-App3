@@ -257,14 +257,20 @@ sap.ui.define([
             }
           },
           emailValidation: function(oEvent) {
-            var fieldValue = oEvent.getSource().getValue();
+            var validTLDs = ["com", "org", "net", "edu", "gov", "in", "co", "io", "ai", "info", "biz", "me"]; // extend as needed
+ 
+            var fieldValue = oEvent.getSource().getValue().trim();
             var fieldName = oEvent.getSource();
-            var format = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          
-            if (!fieldValue.match(format)) {
+            var format = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; ///^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+ 
+            var domainParts = fieldValue.split(".");
+            var tld = domainParts.length > 1 ? domainParts[domainParts.length - 1].toLowerCase() : "";
+ 
+            if (!format.test(fieldValue) || !validTLDs.includes(tld)) {
+            //if (!fieldValue.match(format)) {
               fieldName.setValueState(sap.ui.core.ValueState.Error);
               fieldName.setValueStateText("Invalid email address");
-              
+             
             } else {
               fieldName.setValueState(sap.ui.core.ValueState.None);
             }
@@ -358,7 +364,7 @@ sap.ui.define([
           onLogout: function () {
         
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("main");
+            oRouter.navTo("RouteView1");
             MessageToast.show("Logged out!");
           },
           onHome: function () {

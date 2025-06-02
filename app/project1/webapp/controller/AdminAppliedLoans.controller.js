@@ -76,7 +76,7 @@ sap.ui.define([
         onLogout: function () {
 
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("main");
+            oRouter.navTo("RouteView1");
             MessageToast.show("Logged out!");
 
 
@@ -105,13 +105,13 @@ sap.ui.define([
             and: false
         })
           var oTable = this.byId("loanList");
-          var oBinding = oTable.getBinding("items");
+          var oBinding = oTable.getBinding("rows");
           oBinding.filter(combinedFilters);
         },
       
         onReset: function(){
         var oTable = this.byId("loanList");
-          var oBinding = oTable.getBinding("items");
+          var oBinding = oTable.getBinding("rows");
           oBinding.filter([]);
           oBinding.sort([]);
           this.getView().byId("querySearch").setValue("");
@@ -121,14 +121,14 @@ sap.ui.define([
         
 onSort: function () {
          var oTable = this.byId("loanList");
-         var oBinding = oTable.getBinding("items");    
+         var oBinding = oTable.getBinding("rows");    
      this._bSortAscending = !this._bSortAscending;
          var oSorter = new sap.ui.model.Sorter("applicantName", !this._bSortAscending);
          oBinding.sort(oSorter);
     },    
     onGroup: function () {
         var oTable = this.byId("loanList");
-        var oBinding = oTable.getBinding("items");
+        var oBinding = oTable.getBinding("rows");
         // Group by loanStatus with a custom group header
         var oSorter = new sap.ui.model.Sorter("loanStatus", false, function (oContext) {
             var status = oContext.getProperty("loanStatus");
@@ -150,109 +150,118 @@ onSort: function () {
     },
     onExportAsPDF: async function () {
         try {
-            const { jsPDF } = window.jspdf;
-            const oModel = this.getView().getModel("mainModel");
-    
-            // Bind to the entire entity set
-            const oBinding = oModel.bindList("/customer");
-            const oContexts = await oBinding.requestContexts();
-    
-            if (!oContexts.length) {
-                sap.m.MessageToast.show("No customer data found.");
+            const jsPDFLib = window.jspdf || window.jspdf?.default;
+            if (!jsPDFLib || !jsPDFLib.jsPDF) {
+                sap.m.MessageToast.show("jsPDF library not loaded.");
                 return;
             }
-    
-            const doc = new jsPDF();
-            doc.setFontSize(14);
-            doc.text("Customer Loan Details", 20, 20);
-    
-            let y = 30;
-            let index = 1;
-    
-            for (const oContext of oContexts) {
-                const oData = await oContext.requestObject();
-    
-                doc.setFontSize(12);
-                doc.text(`CUSTOMER ${index++}`, 20, y);
-                y += 10;
-    
-                doc.setFontSize(10);
-                doc.text("ID: " + oData.Id, 20, y);
-                doc.text("Name: " + oData.applicantName, 20, y += 10);
-                doc.text("Email: " + oData.applicantEmail, 20, y += 10);
-                doc.text("Mobile: " + oData.applicantPHno, 20, y += 10);
-                doc.text("Aadhar No.: " + oData.applicantAadhar, 20, y += 10);
-                doc.text("PAN No.: " + oData.applicantPAN, 20, y += 10);
-                doc.text("Salary: " + oData.applicantSalary, 20, y += 10);
-                doc.text("Tenure: " + oData.loanRepaymentMonths + " Months", 20, y += 10);
-                doc.text("Principal: " + oData.loanAmount, 20, y += 10);
-                doc.text("Loan Status: " + oData.loanStatus, 20, y += 10);
-                doc.text("Address: " + oData.applicantAddress, 20, y += 10);
-    
-                y += 20;
-    
-                // Add new page if content exceeds page height
-                if (y > 270) {
-                    doc.addPage();
-                    y = 20;
+            const { jsPDF } = jsPDFLib;
+   
+            const oModel = this.getView().getModel("mainModel");
+   
+            oModel.read("/customer", {
+                success: function (oData) {
+                    const aResults = oData.results;
+                    if (!aResults.length) {
+                        sap.m.MessageToast.show("No customer data found.");
+                        return;
+                    }
+   
+                    const doc = new jsPDF();
+                    doc.setFontSize(14);
+                    doc.text("Customer Loan Details", 20, 20);
+   
+                    let y = 30;
+                    let index = 1;
+   
+                    aResults.forEach((oData) => {
+                        doc.setFontSize(12);
+                        doc.text(`CUSTOMER ${index++}`, 20, y);
+                        y += 10;
+   
+                        doc.setFontSize(10);
+                        doc.text("ID: " + oData.Id, 20, y);
+                        doc.text("Name: " + oData.applicantName, 20, y += 10);
+                        doc.text("Email: " + oData.applicantEmail, 20, y += 10);
+                        doc.text("Mobile: " + oData.applicantPHno, 20, y += 10);
+                        doc.text("Aadhar No.: " + oData.applicantAadhar, 20, y += 10);
+                        doc.text("PAN No.: " + oData.applicantPAN, 20, y += 10);
+                        doc.text("Salary: " + oData.applicantSalary, 20, y += 10);
+                        doc.text("Tenure: " + oData.loanRepaymentMonths + " Months", 20, y += 10);
+                        doc.text("Principal: " + oData.loanAmount, 20, y += 10);
+                        doc.text("Loan Status: " + oData.loanStatus, 20, y += 10);
+                        doc.text("Address: " + oData.applicantAddress, 20, y += 10);
+   
+                        y += 20;
+   
+                        if (y > 270) {
+                            doc.addPage();
+                            y = 20;
+                        }
+                    });
+   
+                    doc.save("AllCustomerLoanDetails.pdf");
+                },
+                error: function (oError) {
+                    console.error("Error fetching customer data:", oError);
+                    sap.m.MessageToast.show("Failed to export customer data.");
                 }
-            }
-    
-            doc.save("AllCustomerLoanDetails.pdf");
+            });
         } catch (err) {
-            console.error("Error fetching customer data:", err);
+            console.error("Unexpected error:", err);
             sap.m.MessageToast.show("Failed to export customer data.");
         }
-    }    
-,              
-    
-onExportToExcel: async function () {
-    try {
-        const oModel = this.getView().getModel("mainModel");
-
-        // Bind to the entire customer list
-        const oBinding = oModel.bindList("/customer");
-        const oContexts = await oBinding.requestContexts();
-
-        if (!oContexts.length) {
-            sap.m.MessageToast.show("No customer data found.");
-            return;
+    },
+   
+    onExportToExcel: function () {
+        try {
+            const oModel = this.getView().getModel("mainModel");
+   
+            oModel.read("/customer", {
+                success: function (oData) {
+                    const aResults = oData.results;
+                    if (!aResults.length) {
+                        sap.m.MessageToast.show("No customer data found.");
+                        return;
+                    }
+   
+                    const worksheetData = [[
+                        "ID", "Name", "Email", "Mobile", "Aadhar No.", "PAN No.",
+                        "Salary", "Tenure", "Principal", "Loan Status", "Address"
+                    ]];
+   
+                    aResults.forEach((oData) => {
+                        worksheetData.push([
+                            oData.Id,
+                            oData.applicantName,
+                            oData.applicantEmail,
+                            oData.applicantPHno,
+                            oData.applicantAadhar,
+                            oData.applicantPAN,
+                            oData.applicantSalary,
+                            oData.loanRepaymentMonths,
+                            oData.loanAmount,
+                            oData.loanStatus,
+                            oData.applicantAddress
+                        ]);
+                    });
+   
+                    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+                    const workbook = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(workbook, worksheet, "Loan Details");
+   
+                    XLSX.writeFile(workbook, "CustomerLoanDetails.xlsx");
+                },
+                error: function (oError) {
+                    console.error("Error exporting Excel:", oError);
+                    sap.m.MessageToast.show("Failed to export Excel file.");
+                }
+            });
+        } catch (err) {
+            console.error("Unexpected error:", err);
+            sap.m.MessageToast.show("Failed to export Excel file.");
         }
-
-        // Prepare header
-        const worksheetData = [[
-            "ID", "Name", "Email", "Mobile", "Aadhar No.", "PAN No.",
-            "Salary", "Tenure", "Principal", "Loan Status", "Address"
-        ]];
-
-        // Add each customer's data
-        for (const oContext of oContexts) {
-            const oData = await oContext.requestObject();
-            worksheetData.push([
-                oData.Id,
-                oData.applicantName,
-                oData.applicantEmail,
-                oData.applicantPHno,
-                oData.applicantAadhar,
-                oData.applicantPAN,
-                oData.applicantSalary,
-                oData.loanRepaymentMonths,
-                oData.loanAmount,
-                oData.loanStatus,
-                oData.applicantAddress
-            ]);
-        }
-
-        const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Loan Details");
-
-        XLSX.writeFile(workbook, "CustomerLoanDetails.xlsx");
-    } catch (err) {
-        console.error("Error exporting Excel:", err);
-        sap.m.MessageToast.show("Failed to export Excel file.");
-    }
-},
+    },
     onMenuAction: function (oEvent) {
         var selectedItem = oEvent.getParameter("item");
         if (!selectedItem) return;
@@ -273,7 +282,7 @@ onExportToExcel: async function () {
         onStatusChange: function () {
             var sSelectedKey = this.byId("statusComboBox").getSelectedKey();
             var oTable = this.byId("loanList");
-            var oBinding = oTable.getBinding("items");
+            var oBinding = oTable.getBinding("rows");
         
             var aFilters = [];
             if (sSelectedKey && sSelectedKey !== "All") {
