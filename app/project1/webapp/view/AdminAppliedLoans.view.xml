@@ -24,7 +24,8 @@
     <Text text="Applied Loans" class="subHeader" />
     </contentLeft>
     <contentRight>
-    <OverflowToolbar id="filtersbar">
+    <Button text="Filter by IDs" press="onOpenIdFilterDialog" type="Default"/>
+      <OverflowToolbar id="filtersbar">
  
 <ComboBox id="statusComboBox" selectedKey="All" change="onStatusChange">
  <core:Item key="All" text="All" />
@@ -222,4 +223,22 @@ class="content"
 <Button text="Close" press="onCloseDialog" />
 </buttons>
     </Dialog>
+<Dialog id="idFilterDialog" title="Filter Applications by IDs" draggable="true" resizable="true">
+    <VBox class="sapUiSmallMargin">
+        <Text text="Enter one or more IDs (comma, space, semicolon, or newline separated):"/>
+        <TextArea id="idListInput" 
+        placeholder="e.g. 101, 102, 103"
+         width="100%"
+          rows="5"
+          growing="true"
+        growingMaxLines="20"
+        class="resizableTextArea"/>
+    </VBox>
+    <beginButton>
+        <Button text="Search" type="Emphasized" press="onIdListSearch"/>
+    </beginButton>
+    <endButton>
+        <Button text="Cancel" press="onCloseIdFilterDialog"/>
+    </endButton>
+</Dialog>
 </mvc:View>

@@ -306,6 +306,50 @@ isPending: function (status) {
 //         }
 //     }
 
+,
+onIdListSearch: function() {
+    var oInput = this.byId("idListInput");
+    var sValue = oInput.getValue();
+    if (!sValue) {
+        sap.m.MessageToast.show("Please enter at least one ID.");
+        return;
+    }
+    // Split by comma, space, or semicolon
+    var aIds = sValue.split(/[,;\s]+/).map(function(id) { return id.trim(); }).filter(Boolean);
+    if (aIds.length === 0) {
+        sap.m.MessageToast.show("No valid IDs entered.");
+        return;
+    }
+    var aFilters = aIds.map(function(id) {
+        return new sap.ui.model.Filter("Id", sap.ui.model.FilterOperator.EQ, id);
+    });
+    var oTable = this.byId("loanList");
+    var oBinding = oTable.getBinding("items");
+    oBinding.filter(new sap.ui.model.Filter({
+        filters: aFilters,
+        and: false
+    }));
+    // Close the dialog after filtering
+    var oDialog = this.byId("idFilterDialog");
+    if (oDialog) {
+        oDialog.close();
+    }
+    this.byId("idListInput").setValue(""); // Clear input field
+},
+onOpenIdFilterDialog: function() {
+    var oDialog = this.byId("idFilterDialog");
+    if (oDialog) {
+        oDialog.open();
+    }
+},
+onCloseIdFilterDialog: function() {
+    var oDialog = this.byId("idFilterDialog");
+    if (oDialog) {
+        oDialog.close();
+    }
+    this.byId("idListInput").setValue(""); // Clear input field
+}
+
                         
     });
 })
