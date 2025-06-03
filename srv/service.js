@@ -62,13 +62,24 @@ module.exports = cds.service.impl(function(){
       }),
 
       this.on("fetchLoansByIds", async (req) => {
-        const { Ids } = req.data;
+        try {
+        let { Ids } = req.data;
+      // Handle case: array with a single comma-separated string
+        if (Array.isArray(Ids) && Ids.length === 1 && typeof Ids[0] === "string" && Ids[0].includes(",")) {
+          Ids = Ids[0].split(",");
+      }
         if (!Ids || !Array.isArray(Ids) || Ids.length === 0) {
           return [];
         }
         const result = await cds.tx(req).run(
           SELECT.from(customer).where({ Id: { in: Ids } })
         );
+        
         return result;
+        }catch (error) {
+          console.error("Error in fetchLoansByIds:", error);
+          // Optionally, return an error object or throw to let CAP handle it
+          return req.reject(500, "Failed to fetch loans by IDs.");
+      }
       })
     })

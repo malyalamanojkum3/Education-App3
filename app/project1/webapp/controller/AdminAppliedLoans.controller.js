@@ -315,7 +315,12 @@ onIdListSearch: function() {
         return;
     }
     // Split by comma, space, semicolon, or newline
-    var aIds = sValue.split(/[,;\s\n]+/).map(function(id) { return id.trim(); }).filter(Boolean);
+    var aIds = sValue
+    .split(/[\s,;\n]+/) // Split on any whitespace, comma, semicolon, or newline
+    .map(function(id) { 
+        return id.replace(/['"]/g, '').trim(); // Remove single and double quotes, then trim
+    })
+    .filter(Boolean);
     if (aIds.length === 0) {
         sap.m.MessageToast.show("No valid IDs entered.");
         return;
