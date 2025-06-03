@@ -8,6 +8,18 @@ module.exports = cds.service.impl(function(){
         const Id = `${currentYear}-EducationLoan-${randomNumber}`;
         return Id;
     }
+
+    this.on('uploadDocument', async (req) => {
+      const { fileName, fileContent } = req.data;
+      // Decode the base64 content
+      const buffer = Buffer.from(fileContent, 'base64');
+      // Simulate saving the file (e.g., to local disk, S3, or a database)
+      // For now, just return a dummy URL
+      const fileUrl = `/files/${fileName}`;
+      // You can add logic here to actually store the file if needed
+      return fileUrl;
+    });
+  
     this.on('submitLoanApplication', async req => {
         const data = req.data;
         const Id = customIdGenerator();
@@ -24,7 +36,7 @@ module.exports = cds.service.impl(function(){
           loanAmount: data.loanAmount,
           loanRepaymentMonths: data.loanRepaymentMonths,
           loanStatus: "Pending",
-          //document: data.document
+          document: data.documentUrl
         });
     
         return { Id };

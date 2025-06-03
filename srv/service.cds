@@ -3,6 +3,9 @@ using { loanApp.db as db } from '../db/schema';
 service myService{
     entity customer as projection on db.loanDetails;
     entity user as projection on db.userDetails;
+    action uploadDocument(
+        fileName: String, 
+        fileContent: String) returns String;
     action submitLoanApplication(
         applicantName : String,
         applicantAddress : String,
