@@ -279,26 +279,31 @@ onSort: function () {
                 sap.m.MessageToast.show("Unknown export option selected.");
         }
     },        
-        onStatusChange: function () {
-            var sSelectedKey = this.byId("statusComboBox").getSelectedKey();
-            var oTable = this.byId("loanList");
-            var oBinding = oTable.getBinding("rows");
-        
-            var aFilters = [];
-            if (sSelectedKey && sSelectedKey !== "All") {
-                aFilters.push(new Filter("loanStatus", FilterOperator.EQ, sSelectedKey));
-            }
-        
+    onAfterRendering: function () {
+        var oComboBox = this.byId("statusComboBox");
+        oComboBox.setSelectedKey("Pending");
+    
+        // Manually trigger the change handler to apply the filter
+        this.onStatusChange({ getSource: () => oComboBox });
+    }
+,    
+    onStatusChange: function (oEvent) {
+        var sSelectedKey = oEvent.getSource().getSelectedKey();
+        var oTable = this.byId("loanList"); // Make sure this ID matches your XML
+        var oBinding = oTable.getBinding("rows"); // Use "rows" for sap.ui.table.Table
+        var aFilters = [];
+    
+        if (sSelectedKey !== "All") {
+            aFilters.push(new sap.ui.model.Filter("loanStatus", sap.ui.model.FilterOperator.EQ, sSelectedKey));
+        }
+    
+        if (oBinding) {
             oBinding.filter(aFilters);
-        
-            // Update column visibility and no data text
-            var oStatusColumn = this.byId("statusColumn");
-            if (oStatusColumn) {
-                oStatusColumn.setVisible(sSelectedKey === "All");
-            }
-        
-            oTable.setNoDataText(sSelectedKey === "Pending" ? "Empty Right Now" : "No Data Available");
-        },                
+        } else {
+            console.warn("Table binding not ready yet.");
+        }
+    }    
+,                
                    
 isPending: function (status) {
          return status === "Pending";
