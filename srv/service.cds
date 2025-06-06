@@ -18,4 +18,8 @@ service myService{
     action approveLoan( Id : String ) returns { Id: String; loanStatus: String; };
     action rejectLoan( Id : String ) returns { Id: String; loanStatus: String; };
     function trackLoan( Id : String ) returns array of {};
+    function getPagedCustomers(page: Integer, pageSize: Integer) returns {
+        results: array of {};
+        totalCount: Integer;
+    };
 }
