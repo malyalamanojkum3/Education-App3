@@ -443,28 +443,48 @@
 
 .paginationButton {
     background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white !important;
+    color: #ffffff !important;
     border: none;
     border-radius: 6px;
     padding: 8px 16px;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 14px;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
     min-width: 80px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.paginationButton .sapMBtnContent {
+    color: #ffffff !important;
+    font-weight: 600;
 }
 
 .paginationButton:hover {
-    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+    background: linear-gradient(135deg, #004085 0%, #002752 100%) !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
 }
 
+.paginationButton:hover .sapMBtnContent {
+    color: #ffffff !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
 .paginationButton:disabled {
     background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
-    color: #fff !important;
+    color: #e9ecef !important;
     cursor: not-allowed;
     transform: none;
     box-shadow: 0 1px 2px rgba(108, 117, 125, 0.2);
+    opacity: 0.8;
+}
+
+.paginationButton:disabled .sapMBtnContent {
+    color: #e9ecef !important;
+    font-weight: 600;
 }
 
 .paginationButton:active {
@@ -493,4 +513,27 @@
     .paginationText {
         font-size: 12px;
     }
+}
+
+/* Additional button text visibility fixes */
+.paginationControls .sapMBtn .sapMBtnInner {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.paginationControls .sapMBtn:disabled .sapMBtnInner {
+    color: #e9ecef !important;
+    font-weight: 600 !important;
+}
+
+.paginationControls .sapMBtn:hover .sapMBtnInner {
+    color: #ffffff !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+    background: transparent !important;
+}
+
+.paginationControls .sapMBtn:hover {
+    border: 2px solid #ffffff !important;
+    background: linear-gradient(135deg, #004085 0%, #002752 100%) !important;
 }

@@ -387,7 +387,7 @@ isPending: function (status) {
                 // Handle the response structure - check if it's nested under getPagedCustomers
                 const res = oData.getPagedCustomers || oData;
                 const results = res.results || res || [];
-                const totalCount = res.totalCount || res.count || (results.length > 0 ? results.length : 0);
+                const totalCount = res.totalCount || (results.length > 0 ? results.length : 0);
                 
                 that._pagedModel.setProperty("/pagedCustomer", results);
                 var totalRecords = totalCount;
