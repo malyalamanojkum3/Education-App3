@@ -1,10 +1,10 @@
-<mvc:View xmlns:f="sap.f" xmlns:table="sap.ui.table" controllerName="project1.controller.AdminAppliedLoans"
+<mvc:View xmlns:rowmodes="sap.ui.table.rowmodes" xmlns:f="sap.f" xmlns:table="sap.ui.table" controllerName="project1.controller.AdminAppliedLoans"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     displayBlock="true"
     xmlns:core="sap.ui.core"
     xmlns:form="sap.ui.layout.form">
-    <Page id ="appliedLoans" showHeader="true" enableScrolling="true" class="customPage">
+    <Page id ="appliedLoans" showHeader="true" enableScrolling="false" class="customPage">
     <customHeader>
       <Bar design="Header" class="box">
       <contentLeft>
@@ -26,7 +26,7 @@
     <contentRight>
     <OverflowToolbar id="filtersbar">
  
-<ComboBox id="statusComboBox" selectedKey="All" change="onStatusChange">
+<ComboBox id="statusComboBox" selectedKey="Pending" change="onStatusChange">
  <core:Item key="All" text="All" />
  <core:Item key="Approved" text="Approved Loans" />
  <core:Item key="Pending" text="Pending Loans" />
@@ -54,10 +54,108 @@
     
     </content>
     <VBox id="_IDGenVBox" class="pageContainer" fitContainer="true">
-        <ScrollContainer id="scrollContainer" height="100%" width="100%" vertical="true" visible="true">
-            <Table id="loanList" items="{mainModel>/customer}" class="table" noDataText="No Data Available">
-                <columns>
-                    <Column id="_IDGenColumn">
+        <ScrollContainer id="scrollContainer" height="auto" width="100%" vertical="true" visible="true">
+        <table:Table
+    id="loanList"
+    rows="{mainModel>/customer}"
+    enableColumnReordering="true"
+    columnHeaderVisible="true"
+    selectionMode="None"
+    width="100%"
+    class="tableclass"
+    >
+    <table:rowMode >
+    <rowmodes:Fixed rowContentHeight="43" />
+    </table:rowMode>
+
+    
+
+    <table:columns>
+        <table:Column sortProperty="Id" filterProperty="Id">
+            <table:label>
+                <Label text="ID" />
+            </table:label>
+            <table:template>
+                <Text text="{mainModel>Id}" />
+            </table:template>
+        </table:Column>
+
+        <table:Column sortProperty="applicantName" filterProperty="applicantName">
+            <table:label>
+                <Label text="Name" />
+            </table:label>
+            <table:template>
+                <Text text="{mainModel>applicantName}" />
+            </table:template>
+        </table:Column>
+
+        <table:Column sortProperty="applicantEmail" filterProperty="applicantEmail">
+            <table:label>
+                <Label text="Email" />
+            </table:label>
+            <table:template>
+                <Text text="{mainModel>applicantEmail}" />
+            </table:template>
+        </table:Column>
+
+        <table:Column sortProperty="applicantPHno" filterProperty="applicantPHno">
+            <table:label>
+                <Label text="Mobile No" />
+            </table:label>
+            <table:template>
+                <Text text="{mainModel>applicantPHno}" />
+            </table:template>
+        </table:Column>
+
+        <table:Column sortProperty="applicantAadhar" filterProperty="applicantAadhar">
+            <table:label>
+                <Label text="Aadhar Number" />
+            </table:label>
+            <table:template>
+                <Text text="{mainModel>applicantAadhar}" />
+            </table:template>
+        </table:Column>
+
+        <table:Column sortProperty="loanStatus" filterProperty="loanStatus">
+            <table:label>
+                <Label text="Status" />
+            </table:label>
+            <table:template>
+                <HBox>
+                    <Text text="{mainModel>loanStatus}" />
+                    <core:Icon
+                        src="{= ${mainModel>loanStatus} === 'Approved' ? 'sap-icon://verified' : ${mainModel>loanStatus} === 'Rejected' ? 'sap-icon://decline' : 'sap-icon://alert'}"
+                        color="{= ${mainModel>loanStatus} === 'Approved' ? 'green' : ${mainModel>loanStatus} === 'Rejected' ? 'red' : 'orange'}"
+                        size="1rem"
+                        class="statusIcon"/>
+                </HBox>
+            </table:template>
+        </table:Column>
+
+        <table:Column>
+            <table:label>
+                <Label text="Actions" />
+            </table:label>
+            <table:template>
+                <Button text="View" press="onViewDetails" />
+            </table:template>
+        </table:Column>
+    </table:columns>
+</table:Table>
+
+            <!-- <Table 
+            id="loanList" 
+            items="{mainModel>/customer}" 
+            class="table" 
+            noDataText="No Data Available"
+            growing="true"
+            growingScrollToLoad="true"
+            inset="false"
+            mode="None"
+            sticky="ColumnHeaders"
+            >
+                <columns >
+                    <Column  id="_IDGenColumn">
                         <Text id="_IDGenText" text="ID" class="font1"/>
                     </Column>
                     <Column id="_IDGenColumn1">
@@ -107,8 +205,8 @@
                         </cells>
                     </ColumnListItem>
                 </items>
-            </Table>
-        </ScrollContainer>
+            </Table> -->
+        </ScrollContainer> 
     </VBox>
     </Page>
     

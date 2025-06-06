@@ -115,7 +115,7 @@ sap.ui.define([
             applicantSalary: ApplicantSalary,
             loanAmount: ApplicantLoanAmount,
             loanRepaymentMonths: ApplicantRepaymentMonths,
-            //document: this.filebase64String,
+            documentUrl: this.documentUrl 
           };
           //posting data
           var oModel=this.getView().getModel("mainModel");
@@ -165,52 +165,67 @@ sap.ui.define([
             
 
                 },
-        // onUpload: function () {
-        //     var file = this._file;
-        //     if(!file){
-        //       sap.m.MessageToast.show("Please choose a file first.");
-        //       return;
-        //     }
-        //     var filename = file.name;
-        //     var filesize = file.size;
-        //     var extension = filename.substr(filename.lastIndexOf('.')+1).toLowerCase();
-        //     console.log(extension);
-
-        //     if(!["pdf", "jpeg", "png", "jpg"].includes(extension)) {
-        //       sap.m.MessageToast.show("Kindly upload only JPG, JPEG, PDF, and PNG files");
-        //       return;
-
-        //     } else if (filesize > 2000000) {
-        //       sap.m.MessageToast.show("File size should not be more than 2MB.");
-        //       return;
-        //     }
-
-        //     var reader = new FileReader();
-        //     reader.onload = function(e) {
-        //       var fileupArray = new Uint8Array(e.target.result);
-        //       this.fileData = fileupArray;
-        // //Compress the file data using pako
-        // var compressedData = pako.deflate(fileupArray);
-
-        
-        // // Convert compressed data to a binary string
+                onUpload: function () {
+                  var file = this._file;
+                  if (!file) {
+                    sap.m.MessageToast.show("Please choose a file first.");
+                    return;
+                  }
                 
-        // var binaryString = Array.from(compressedData, byte => String.fromCharCode(byte)).join('');
-
-
-        //       //Convert Uint8Array to a string
-        //      // var binaryString = Array.from(fileupArray, byte => String.fromCharCode(byte)).join('');// this same but replaced with compressed data
-
-        //       // Convert binary string to Base64
-        //       var base64Stringfile = btoa(binaryString);
-        //       this.filebase64String = base64Stringfile;
-        //       console.log(this.filebase64String);
-
-        //     }.bind(this);
-        //     reader.readAsArrayBuffer(file);
-
-
-        // },
+                  var filename = file.name;
+                  var filesize = file.size;
+                  var extension = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+                
+                  if (!["pdf", "jpeg", "png", "jpg"].includes(extension)) {
+                    sap.m.MessageToast.show("Kindly upload only JPG, JPEG, PDF, and PNG files");
+                    return;
+                  } else if (filesize > 2000000) {
+                    sap.m.MessageToast.show("File size should not be more than 2MB.");
+                    return;
+                  }
+                
+                  var reader = new FileReader();
+                  reader.onload = function (e) {
+                    var fileupArray = new Uint8Array(e.target.result);
+                
+                    // Compress the file data using pako
+                    var compressedData = pako.deflate(fileupArray);
+                
+                    // Convert compressed data to a binary string
+                    var binaryString = Array.from(compressedData, byte => String.fromCharCode(byte)).join('');
+                
+                    // Convert binary string to Base64
+                    var base64Stringfile = btoa(binaryString);
+                    this.filebase64String = base64Stringfile;
+                
+                    // Call CAP function to upload the document
+                    var oModel = this.getView().getModel("mainModel"); // default model
+                    
+if (!oModel) {
+    sap.m.MessageBox.error("OData model 'mainModel' not found.");
+    return;
+  }  
+                    oModel.callFunction("/uploadDocument", {
+                      method: "POST",
+                      urlParameters: {
+                        fileName: file.name,
+                        fileContent: this.filebase64String
+                      },
+                      success: function (data) {
+                        this.documentUrl = data.fileUrl; // Save the returned file URL
+                        sap.m.MessageToast.show("File uploaded successfully.");
+                      }.bind(this),
+                      error: function (err) {
+                        console.error("Upload failed", err);
+                        sap.m.MessageBox.error("File upload failed. Please try again.");
+                      }
+                    });
+                
+                  }.bind(this);
+                
+                  reader.readAsArrayBuffer(file);
+                }
+, 
                 
         onClear: function(){
             this.byId("enterApplicantName").setValue("");
@@ -257,14 +272,20 @@ sap.ui.define([
             }
           },
           emailValidation: function(oEvent) {
-            var fieldValue = oEvent.getSource().getValue();
+            var validTLDs = ["com", "org", "net", "edu", "gov", "in", "co", "io", "ai", "info", "biz", "me"]; // extend as needed
+ 
+            var fieldValue = oEvent.getSource().getValue().trim();
             var fieldName = oEvent.getSource();
-            var format = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          
-            if (!fieldValue.match(format)) {
+            var format = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; ///^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+ 
+            var domainParts = fieldValue.split(".");
+            var tld = domainParts.length > 1 ? domainParts[domainParts.length - 1].toLowerCase() : "";
+ 
+            if (!format.test(fieldValue) || !validTLDs.includes(tld)) {
+            //if (!fieldValue.match(format)) {
               fieldName.setValueState(sap.ui.core.ValueState.Error);
               fieldName.setValueStateText("Invalid email address");
-              
+             
             } else {
               fieldName.setValueState(sap.ui.core.ValueState.None);
             }
@@ -358,7 +379,7 @@ sap.ui.define([
           onLogout: function () {
         
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("main");
+            oRouter.navTo("RouteView1");
             MessageToast.show("Logged out!");
           },
           onHome: function () {

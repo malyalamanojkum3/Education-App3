@@ -26,7 +26,7 @@
     <contentRight>
     <OverflowToolbar id="filtersbar">
  
-<ComboBox id="statusComboBox" selectedKey="All" change="onStatusChange">
+<ComboBox id="statusComboBox" selectedKey="Pending" change="onStatusChange">
  <core:Item key="All" text="All" />
  <core:Item key="Approved" text="Approved Loans" />
  <core:Item key="Pending" text="Pending Loans" />
