@@ -12,31 +12,43 @@ sap.ui.define([
 
     return Controller.extend("project1.controller.AdminAppliedLoans", {
         
+        onInit: function() {
+        console.log("AdminAppliedLoans onInit called"); // Debug
+        this._pageSize = 10;
+        this._currentPage = 1;
+        sap.ui.core.BusyIndicator.show(0);
+        
+        // Create and set a JSONModel for paged data with initial values
+        this._pagedModel = new sap.ui.model.json.JSONModel({
+            pagedCustomer: [],
+            currentPage: 1,
+            totalPages: 1,
+            totalRecords: 0,
+            isPreviousEnabled: false,
+            isNextEnabled: false
+        });
+        this.getView().setModel(this._pagedModel, "pagedModel");
+        
+        var that = this;
+        function tryLoad() {
+            var oModel = that.getView().getModel("mainModel");
+            if (oModel) {
+                oModel.metadataLoaded().then(function() {
+                    that._loadPage(that._currentPage);
+                    sap.ui.core.BusyIndicator.hide();
+                });
+            } else {
+                setTimeout(tryLoad, 200);
+            }
+        }
+        tryLoad();
+    },
        
         onViewDetails: function (oEvent) {
             sap.ui.core.BusyIndicator.show(0);
-            
-            // Get the row data from pagedModel
             var oRowContext = oEvent.getSource().getBindingContext("pagedModel");
-            var oRowData = oRowContext.getObject();
-            
-            // Create a temporary model path for mainModel to match the data structure
-            var oMainModel = this.getView().getModel("mainModel");
-            var sPath = "/customer(" + oRowData.Id + ")";
-            
-            // Try to find the customer in mainModel first
-            var oMainModelContext = oMainModel.createBindingContext(sPath);
-            
-            // If not found in mainModel, create a temporary binding using the paged data
-            if (!oMainModelContext) {
-                // Set the data temporarily in mainModel for dialog binding
-                var tempPath = "/tempCustomer";
-                oMainModel.setProperty(tempPath, oRowData);
-                oMainModelContext = oMainModel.createBindingContext(tempPath);
-            }
-            
             var oDialog = this.byId("customerDetailsDialog");
-            oDialog.setBindingContext(oMainModelContext, "mainModel");
+            oDialog.setBindingContext(oRowContext, "pagedModel");
             oDialog.open();
             sap.ui.core.BusyIndicator.hide();
         },
@@ -49,7 +61,7 @@ sap.ui.define([
             sap.ui.core.BusyIndicator.show(0);
         
             var oDialog = this.byId("customerDetailsDialog");
-            var oContext = oDialog.getBindingContext("mainModel");
+            var oContext = oDialog.getBindingContext("pagedModel");
             var oModel = this.getView().getModel("mainModel");
             var oData = oContext.getObject();
             var that = this;
@@ -77,7 +89,7 @@ sap.ui.define([
             sap.ui.core.BusyIndicator.show(0);
         
             var oDialog = this.byId("customerDetailsDialog");
-            var oContext = oDialog.getBindingContext("mainModel");
+            var oContext = oDialog.getBindingContext("pagedModel");
             var oModel = this.getView().getModel("mainModel");
             var oData = oContext.getObject();
             var that = this;
@@ -331,43 +343,11 @@ onSort: function () {
                 oStatusColumn.setVisible(sSelectedKey === "All");
             }
         
-            oTable.setNoDataText(sSelectedKey === "Pending" ? "Empty Right Now" : "No Data Available");
+            oTable.setNoData(sSelectedKey === "Pending" ? "Empty Right Now" : "No Data Available");
         },                
                    
 isPending: function (status) {
          return status === "Pending";
-    },
-
-    onInit: function() {
-        console.log("AdminAppliedLoans onInit called"); // Debug
-        this._pageSize = 10;
-        this._currentPage = 1;
-        sap.ui.core.BusyIndicator.show(0);
-        
-        // Create and set a JSONModel for paged data with initial values
-        this._pagedModel = new sap.ui.model.json.JSONModel({
-            pagedCustomer: [],
-            currentPage: 1,
-            totalPages: 1,
-            totalRecords: 0,
-            isPreviousEnabled: false,
-            isNextEnabled: false
-        });
-        this.getView().setModel(this._pagedModel, "pagedModel");
-        
-        var that = this;
-        function tryLoad() {
-            var oModel = that.getView().getModel("mainModel");
-            if (oModel) {
-                oModel.metadataLoaded().then(function() {
-                    that._loadPage(that._currentPage);
-                    sap.ui.core.BusyIndicator.hide();
-                });
-            } else {
-                setTimeout(tryLoad, 200);
-            }
-        }
-        tryLoad();
     },
 
     _loadPage: function(page) {

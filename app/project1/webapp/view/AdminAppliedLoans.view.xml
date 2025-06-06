@@ -212,65 +212,65 @@ class="content"
             <HBox>
             <HBox>
                     <Label text="ID:"  class="font customLabel1"/>
-                    <Text text="{mainModel>Id}" class="font customInput1"/>
+                    <Text text="{pagedModel>Id}" class="font customInput1"/>
                     </HBox>
                     <HBox>
                     <Label  text="Name:" class="font customLabel1" />
-                    <Text text="{mainModel>applicantName}" class="font customInput1"/>
+                    <Text text="{pagedModel>applicantName}" class="font customInput1"/>
 </HBox>
 </HBox>
 <HBox>
                     <HBox>
                     <Label  text="Email:" class="font customLabel1"/>
-                    <Text  text="{mainModel>applicantEmail}" class="font customInput1"/>
+                    <Text  text="{pagedModel>applicantEmail}" class="font customInput1"/>
               </HBox>
                     <HBox>
                     <Label text="Mobile:" class="font customLabel1" />
-                    <Text text="{mainModel>applicantPHno}" class="font customInput1" />
+                    <Text text="{pagedModel>applicantPHno}" class="font customInput1" />
                 </HBox>
                 </HBox>
     <HBox>
                     <HBox>
                     <Label text="Aadhar No.:"  class="font customLabel1" />
-                    <Text text="{mainModel>applicantAadhar}" class="font customInput1"/>
+                    <Text text="{pagedModel>applicantAadhar}" class="font customInput1"/>
                 </HBox>
                     <HBox>
                     <Label text="PAN No.:" class="font customLabel1" />
-                    <Text text="{mainModel>applicantPAN}" class="font customInput1"/>
+                    <Text text="{pagedModel>applicantPAN}" class="font customInput1"/>
                 </HBox>
                 </HBox>
                     <HBox>
                     <HBox>
                     <Label text="Salary:" class="font customLabel1"/>
-                    <Text text="₹{mainModel>applicantSalary}.00" class="font customInput1" />
+                    <Text text="₹{pagedModel>applicantSalary}.00" class="font customInput1" />
                 </HBox>
                     <HBox>
                     <Label text="Tenure:" class="font customLabel1"/>
-                    <Text text="{mainModel>loanRepaymentMonths} Months" class="font customInput1" />
+                    <Text text="{pagedModel>loanRepaymentMonths} Months" class="font customInput1" />
               </HBox>
               </HBox>
                     <HBox>
                     <HBox>
                     <Label text="Principal:" class="font customLabel1" />
-                    <Text text="₹{mainModel>loanAmount}.00" class="font customInput1"/>
+                    <Text text="₹{pagedModel>loanAmount}.00" class="font customInput1"/>
                 </HBox>
                 <HBox>
                     <Label text="Loan Status:" class="font customLabel1" />
-                    <Text text="{mainModel>loanStatus}" class="font customInput1"/>
+                    <Text text="{pagedModel>loanStatus}" class="font customInput1"/>
                 </HBox>
                 </HBox>
                  <HBox>
                  
                 <HBox>
                     <Label  text="Address:" class="font customLabel1"/>
-                    <Text  text="{mainModel>applicantAddress}" class="font customInput1" />
+                    <Text  text="{pagedModel>applicantAddress}" class="font customInput1" />
                </HBox>
                <!-- <HBox>
            <Label text="Documents:" class="font customLabel1"/>
      <VBox>
-         <List items="{mainModel>document}">
+         <List items="{pagedModel>document}">
      <StandardListItem
-     title="{mainModel>applicantName}"
+     title="{pagedModel>applicantName}"
      icon="sap-icon://attachment"
      type="Active"
      press="onDocumentPress"
@@ -285,10 +285,10 @@ class="content"
         </content>
      <buttons>
      <Button type="Accept" text="Accept" press="onApproveLoan"
-    visible="{path: 'mainModel>loanStatus', formatter: '.isPending', targetType: 'any' }"
+    visible="{path: 'pagedModel>loanStatus', formatter: '.isPending', targetType: 'any' }"
     class="actionbuttonspacing"/>  
 <Button type="Reject" text="Reject" press="onRejectLoan"
-    visible="{path: 'mainModel>loanStatus', formatter: '.isPending',  targetType: 'any' }"
+    visible="{path: 'pagedModel>loanStatus', formatter: '.isPending',  targetType: 'any' }"
     class="actionbuttonspacing"/>
 <Button text="Close" press="onCloseDialog" />
 </buttons>
