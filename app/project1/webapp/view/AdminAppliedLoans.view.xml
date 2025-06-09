@@ -53,11 +53,11 @@
     </Bar>
     
     </content>
-    <VBox id="_IDGenVBox" class="pageContainer" fitContainer="true">
-        <ScrollContainer id="scrollContainer" height="auto" width="100%" vertical="true" visible="true">
+    <VBox id="_IDGenVBox" class="pageContainer" fitContainer="false">
+        <ScrollContainer id="scrollContainer" height="calc(100vh - 300px)" width="100%" vertical="true" visible="true">
         <table:Table
     id="loanList"
-    rows="{mainModel>/customer}"
+    rows="{pagedModel>/pagedCustomer}"
     enableColumnReordering="true"
     columnHeaderVisible="true"
     selectionMode="None"
@@ -76,7 +76,7 @@
                 <Label text="ID" />
             </table:label>
             <table:template>
-                <Text text="{mainModel>Id}" />
+                <Text text="{pagedModel>Id}" />
             </table:template>
         </table:Column>
 
@@ -85,7 +85,7 @@
                 <Label text="Name" />
             </table:label>
             <table:template>
-                <Text text="{mainModel>applicantName}" />
+                <Text text="{pagedModel>applicantName}" />
             </table:template>
         </table:Column>
 
@@ -94,7 +94,7 @@
                 <Label text="Email" />
             </table:label>
             <table:template>
-                <Text text="{mainModel>applicantEmail}" />
+                <Text text="{pagedModel>applicantEmail}" />
             </table:template>
         </table:Column>
 
@@ -103,7 +103,7 @@
                 <Label text="Mobile No" />
             </table:label>
             <table:template>
-                <Text text="{mainModel>applicantPHno}" />
+                <Text text="{pagedModel>applicantPHno}" />
             </table:template>
         </table:Column>
 
@@ -112,7 +112,7 @@
                 <Label text="Aadhar Number" />
             </table:label>
             <table:template>
-                <Text text="{mainModel>applicantAadhar}" />
+                <Text text="{pagedModel>applicantAadhar}" />
             </table:template>
         </table:Column>
 
@@ -122,10 +122,10 @@
             </table:label>
             <table:template>
                 <HBox>
-                    <Text text="{mainModel>loanStatus}" />
+                    <Text text="{pagedModel>loanStatus}" />
                     <core:Icon
-                        src="{= ${mainModel>loanStatus} === 'Approved' ? 'sap-icon://verified' : ${mainModel>loanStatus} === 'Rejected' ? 'sap-icon://decline' : 'sap-icon://alert'}"
-                        color="{= ${mainModel>loanStatus} === 'Approved' ? 'green' : ${mainModel>loanStatus} === 'Rejected' ? 'red' : 'orange'}"
+                        src="{= ${pagedModel>loanStatus} === 'Approved' ? 'sap-icon://verified' : ${pagedModel>loanStatus} === 'Rejected' ? 'sap-icon://decline' : 'sap-icon://alert'}"
+                        color="{= ${pagedModel>loanStatus} === 'Approved' ? 'green' : ${pagedModel>loanStatus} === 'Rejected' ? 'red' : 'orange'}"
                         size="1rem"
                         class="statusIcon"/>
                 </HBox>
@@ -143,70 +143,43 @@
     </table:columns>
 </table:Table>
 
-            <!-- <Table 
-            id="loanList" 
-            items="{mainModel>/customer}" 
-            class="table" 
-            noDataText="No Data Available"
-            growing="true"
-            growingScrollToLoad="true"
-            inset="false"
-            mode="None"
-            sticky="ColumnHeaders"
-            >
-                <columns >
-                    <Column  id="_IDGenColumn">
-                        <Text id="_IDGenText" text="ID" class="font1"/>
-                    </Column>
-                    <Column id="_IDGenColumn1">
-                        <Text id="_IDGenText1" text="Name" class="font1"/>
-                    </Column>
-                    <Column id="_IDGenColumn11">
-                        <Text id="_IDGenText112" text="Email" class="font1"/>
-                    </Column>
-                    <Column id="_IDGenColumn111">
-                        <Text id="_IDGenText1111" text="MobileNo" class="font1"/>
-                    </Column>
-                    <Column>
-                        <Text  text="Aadhar Number" class="font1"/>
-                    </Column>
-                    <Column>
-    <Text text="Status" class="font1"/>
-</Column>
-                    <Column id="_IDGenColumn3" hAlign="Center">
-                        <Text id="_IDGenText3" text="Actions" class="action font1"/>
-                    </Column>
-                </columns>
-                <items>
-                    <ColumnListItem id="_IDGenColumnListItem1">
-                        <cells>
-                            <Text id="_IDGenText4" text="{mainModel>Id}" width="150px"/>
-                            <Text id="_IDGenText5" text="{mainModel>applicantName}" />
-                            <Text id="_IDGenText6" text="{mainModel>applicantEmail}" width="150px" />
-                            <Text id="_IDGenText77" text="{mainModel>applicantPHno}"/>
-                            <Text id="_IDGenText78" text="{mainModel>applicantAadhar}"/>
-                           
-<HBox>
-     <Text text="{mainModel>loanStatus}" /> 
-    <core:Icon
-    src="{= ${mainModel>loanStatus} === 'Approved' ? 'sap-icon://accept' : ${mainModel>loanStatus} === 'Rejected' ? 'sap-icon://decline' : 'sap-icon://alert'}"
-    size="1rem"
-    class="statusIcon">
-    <core:customData>
-        <core:CustomData key="status" value="{mainModel>loanStatus}" writeToDom="true" />
-    </core:customData>
-</core:Icon>
 
-</HBox>
-<HBox id="_IDGenHBox" class="action">
-     <Button type="Default" text="View" press="onViewDetails" class="actionbuttonspacing"/>
-     
- </HBox>
-                        </cells>
-                    </ColumnListItem>
-                </items>
-            </Table> -->
-        </ScrollContainer> 
+        </ScrollContainer>
+        
+        <!-- Pagination Controls -->
+        <HBox class="paginationBar" justifyContent="SpaceBetween" alignItems="Center">
+            <HBox class="paginationInfo">
+                <Text text="Page {pagedModel>/currentPage} of {pagedModel>/totalPages}" class="paginationText"/>
+                <Text text="({pagedModel>/totalRecords} total records)" class="paginationText"/>
+            </HBox>
+            <HBox class="paginationControls">
+                <Button 
+                    text="First" 
+                    press="onFirstPage" 
+                    enabled="{pagedModel>/isPreviousEnabled}"
+                    type="Transparent"
+                    class="paginationButton"/>
+                <Button 
+                    text="Previous" 
+                    press="onPreviousPage" 
+                    enabled="{pagedModel>/isPreviousEnabled}"
+                    type="Transparent"
+                    class="paginationButton"/>
+                <Button 
+                    text="Next" 
+                    press="onNextPage" 
+                    enabled="{pagedModel>/isNextEnabled}"
+                    type="Transparent"
+                    class="paginationButton"/>
+                <Button 
+                    text="Last" 
+                    press="onLastPage" 
+                    enabled="{pagedModel>/isNextEnabled}"
+                    type="Transparent"
+                    class="paginationButton"/>
+            </HBox>
+        </HBox>
+        
     </VBox>
     </Page>
     
@@ -239,51 +212,51 @@ class="content"
             <HBox>
             <HBox>
                     <Label text="ID:"  class="font customLabel1"/>
-                    <Text text="{mainModel>Id}" class="font customInput1"/>
+                    <Text text="{pagedModel>Id}" class="font customInput1"/>
                     </HBox>
                     <HBox>
                     <Label  text="Name:" class="font customLabel1" />
-                    <Text text="{mainModel>applicantName}" class="font customInput1"/>
+                    <Text text="{pagedModel>applicantName}" class="font customInput1"/>
 </HBox>
 </HBox>
 <HBox>
                     <HBox>
                     <Label  text="Email:" class="font customLabel1"/>
-                    <Text  text="{mainModel>applicantEmail}" class="font customInput1"/>
+                    <Text  text="{pagedModel>applicantEmail}" class="font customInput1"/>
               </HBox>
                     <HBox>
                     <Label text="Mobile:" class="font customLabel1" />
-                    <Text text="{mainModel>applicantPHno}" class="font customInput1" />
+                    <Text text="{pagedModel>applicantPHno}" class="font customInput1" />
                 </HBox>
                 </HBox>
     <HBox>
                     <HBox>
                     <Label text="Aadhar No.:"  class="font customLabel1" />
-                    <Text text="{mainModel>applicantAadhar}" class="font customInput1"/>
+                    <Text text="{pagedModel>applicantAadhar}" class="font customInput1"/>
                 </HBox>
                     <HBox>
                     <Label text="PAN No.:" class="font customLabel1" />
-                    <Text text="{mainModel>applicantPAN}" class="font customInput1"/>
+                    <Text text="{pagedModel>applicantPAN}" class="font customInput1"/>
                 </HBox>
                 </HBox>
                     <HBox>
                     <HBox>
                     <Label text="Salary:" class="font customLabel1"/>
-                    <Text text="₹{mainModel>applicantSalary}.00" class="font customInput1" />
+                    <Text text="₹{pagedModel>applicantSalary}.00" class="font customInput1" />
                 </HBox>
                     <HBox>
                     <Label text="Tenure:" class="font customLabel1"/>
-                    <Text text="{mainModel>loanRepaymentMonths} Months" class="font customInput1" />
+                    <Text text="{pagedModel>loanRepaymentMonths} Months" class="font customInput1" />
               </HBox>
               </HBox>
                     <HBox>
                     <HBox>
                     <Label text="Principal:" class="font customLabel1" />
-                    <Text text="₹{mainModel>loanAmount}.00" class="font customInput1"/>
+                    <Text text="₹{pagedModel>loanAmount}.00" class="font customInput1"/>
                 </HBox>
                 <HBox>
                     <Label text="Loan Status:" class="font customLabel1" />
-                    <Text text="{mainModel>loanStatus}" class="font customInput1"/>
+                    <Text text="{pagedModel>loanStatus}" class="font customInput1"/>
                 </HBox>
                 </HBox>
                  <HBox>
@@ -291,7 +264,7 @@ class="content"
                  <HBox>
                 <HBox>
                     <Label  text="Address:" class="font customLabel1"/>
-                    <Text  text="{mainModel>applicantAddress}" class="font customInput1" />
+                    <Text  text="{pagedModel>applicantAddress}" class="font customInput1" />
                </HBox>
                <HBox>
   <Label text="Document:" class="font customLabel1" />
@@ -306,9 +279,9 @@ class="content"
                <!-- <HBox>
            <Label text="Documents:" class="font customLabel1"/>
      <VBox>
-         <List items="{mainModel>document}">
+         <List items="{pagedModel>document}">
      <StandardListItem
-     title="{mainModel>applicantName}"
+     title="{pagedModel>applicantName}"
      icon="sap-icon://attachment"
      type="Active"
      press="onDocumentPress"
@@ -323,10 +296,10 @@ class="content"
         </content>
      <buttons>
      <Button type="Accept" text="Accept" press="onApproveLoan"
-    visible="{path: 'mainModel>loanStatus', formatter: '.isPending', targetType: 'any' }"
+    visible="{path: 'pagedModel>loanStatus', formatter: '.isPending', targetType: 'any' }"
     class="actionbuttonspacing"/>  
 <Button type="Reject" text="Reject" press="onRejectLoan"
-    visible="{path: 'mainModel>loanStatus', formatter: '.isPending',  targetType: 'any' }"
+    visible="{path: 'pagedModel>loanStatus', formatter: '.isPending',  targetType: 'any' }"
     class="actionbuttonspacing"/>
 <Button text="Close" press="onCloseDialog" />
 </buttons>

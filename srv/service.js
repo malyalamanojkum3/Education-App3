@@ -86,5 +86,24 @@ module.exports = cds.service.impl(function(){
           return req.error(404, `Loan application with Id ${Id} not found.`);
         }
         return result;
-      })
+      }),
+
+      this.on('getPagedCustomers', async function (req) {
+        const { page = 1, pageSize = 10 } = req.data;
+        const { customer } = this.entities;
+        const offset = (page - 1) * pageSize;
+        // Use cds.tx(req).run with SELECT for paged results
+        const results = await cds.tx(req).run(
+          cds.ql.SELECT.from(customer).limit(pageSize, offset)
+        );
+        // Use cds.tx(req).run for count
+        const totalResult = await cds.tx(req).run(
+          cds.ql.SELECT.from(customer).columns('count(1) as count')
+        );
+        const totalCount = totalResult && totalResult[0] && totalResult[0].count ? totalResult[0].count : 0;
+        return {
+            results,
+            totalCount
+        };
+      });
     })
