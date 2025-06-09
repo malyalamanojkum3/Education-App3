@@ -269,11 +269,11 @@ class="content"
                <HBox>
   <Label text="Document:" class="font customLabel1" />
   <Link 
-     text="{mainModel>document}" 
-     href="{mainModel>document}" 
+     text="{pagedModel>document}" 
+     href="{pagedModel>document}" 
      target="_blank" 
      class="font2 customInput2" 
-     visible="{= !!${mainModel>document} }" />
+     visible="{= !!${pagedModel>document} }" />
 </HBox>
                </HBox>
                <!-- <HBox>
