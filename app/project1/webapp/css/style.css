@@ -36,13 +36,17 @@
   margin: 0 auto; 
   max-width: 1400px; 
   padding: 10px 10px; 
-  margin-bottom: 30px !important;
+  margin-bottom: 0 !important;
   box-sizing: border-box; 
       font-style: normal;
       background: white;   
   height: auto !important; /* Allow content to define height */
   min-height: calc(100vh - 200px); /* Minimum height minus header space */
   overflow: visible; /* Allow pagination to show */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
   
   }
         
@@ -436,6 +440,8 @@
     margin-top: 16px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     min-height: 40px;
+    flex-shrink: 0;
+    margin-top: 0.5rem;
 }
 
 .paginationInfo {
@@ -550,4 +556,11 @@
 .paginationControls .sapMBtn:hover {
     border: 2px solid #ffffff !important;
     background: linear-gradient(135deg, #004085 0%, #002752 100%) !important;
+}
+
+#scrollContainer {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 80vh;
+  overflow-y: auto;
 }

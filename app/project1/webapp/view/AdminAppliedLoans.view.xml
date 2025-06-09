@@ -53,20 +53,20 @@
     </Bar>
     
     </content>
-    <VBox id="_IDGenVBox" class="pageContainer" fitContainer="false">
-        <ScrollContainer id="scrollContainer" height="calc(100vh - 300px)" width="100%" vertical="true" visible="true">
-        <table:Table
-    id="loanList"
-    rows="{pagedModel>/pagedCustomer}"
-    enableColumnReordering="true"
-    columnHeaderVisible="true"
-    selectionMode="None"
-    width="100%"
-    class="tableclass"
-    >
-    <table:rowMode >
-    <rowmodes:Fixed rowContentHeight="43" />
-    </table:rowMode>
+    <VBox id="_IDGenVBox" class="pageContainer" fitContainer="true">
+        <ScrollContainer id="scrollContainer" height="auto" width="100%" vertical="true" visible="true">
+            <table:Table
+                id="loanList"
+                rows="{pagedModel>/pagedCustomer}"
+                enableColumnReordering="true"
+                columnHeaderVisible="true"
+                selectionMode="None"
+                width="100%"
+                class="tableclass"
+            >
+                <table:rowMode >
+                    <rowmodes:Fixed rowContentHeight="36" />
+                </table:rowMode>
 
     
 
@@ -143,10 +143,9 @@
     </table:columns>
 </table:Table>
 
-
         </ScrollContainer>
         
-        <!-- Pagination Controls -->
+        <!-- Pagination Controls: stick to bottom of VBox -->
         <HBox class="paginationBar" justifyContent="SpaceBetween" alignItems="Center">
             <HBox class="paginationInfo">
                 <Text text="Page {pagedModel>/currentPage} of {pagedModel>/totalPages}" class="paginationText"/>
@@ -179,7 +178,6 @@
                     class="paginationButton"/>
             </HBox>
         </HBox>
-        
     </VBox>
     </Page>
     
