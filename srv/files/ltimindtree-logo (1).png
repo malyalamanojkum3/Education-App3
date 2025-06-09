@@ -1,0 +1,78 @@
+signup:new user adding
+
+
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(oNewUser.email)) {
+        sap.m.MessageToast.show("Please enter a valid email address.");
+        return;
+    }
+
+    // Mobile number validation (10 digits, numeric only)
+    var mobileRegex = /^\d{10}$/;
+    if (!mobileRegex.test(oNewUser.mobileNumber)) {
+        sap.m.MessageToast.show("Please enter a valid 10-digit mobile number.");
+        return;
+    }
+
+    // Password validation (minimum 6 characters, at least one number and one letter)
+    var passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+    if (!passwordRegex.test(oNewUser.password)) {
+        sap.m.MessageToast.show("Password must be at least 6 characters long and include both letters and numbers.");
+        return;
+    }
+
+    // Check if user already exists
+    var oListBinding = oModel.bindList("/user", undefined, undefined,
+        [new sap.ui.model.Filter("email", sap.ui.model.FilterOperator.EQ, oNewUser.email)]
+    );
+
+    oListBinding.requestContexts().then(function (aContexts) {
+        if (aContexts.length > 0) {
+            sap.m.MessageToast.show("User already exists. Please login.");
+        } else {
+            var oUserListBinding = oModel.bindList("/user");
+            var oContext = oUserListBinding.create(oNewUser);
+
+            oContext.created().then(function () {
+                sap.m.MessageToast.show("Registration successful!");
+                this.onLogin(); // Optional: switch to login view
+            }.bind(this)).catch(function (oError) {
+                sap.m.MessageToast.show("Error during registration.");
+                console.error("Registration error:", oError);
+            });
+        }
+    }.bind(this)).catch(function (oError) {
+        sap.m.MessageToast.show("Error checking existing users.");
+        console.error("User check error:", oError);
+    });
+}
+
+2. login: validate the user
+OnLoginbutton: function () {
+  var oModel = this.getView().getModel("mainModel");
+  var sEmail = this.byId("emailinput").getValue();
+  var sPassword = this.byId("passinput").getValue();
+
+  oModel.read("/Users", {
+    filters: [new sap.ui.model.Filter("email", sap.ui.model.FilterOperator.EQ, sEmail)],
+    success: function (oData) {
+      if (oData.results.length === 0) {
+        sap.m.MessageToast.show("Invalid User ID. Please sign up.");
+      } else {
+        var oUser = oData.results[0];
+        if (oUser.password === sPassword) {
+          sap.m.MessageToast.show("Login successful!");
+          var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+          oRouter.navTo("dashboard");
+        } else {
+          sap.m.MessageToast.show("Wrong details entered.");
+        }
+      }
+    }.bind(this),
+    error: function () {
+      sap.m.MessageToast.show("Error during login.");
+    }
+  });
+}
+
+

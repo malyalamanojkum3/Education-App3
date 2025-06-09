@@ -103,7 +103,13 @@ sap.ui.define([
             });
             return;
             
-          }
+          }    
+console.log("📦 Document URL before submit:", this.documentUrl);
+  if (!this.documentUrl) {
+    sap.m.MessageBox.error("Please upload a document before submitting.");
+    sap.ui.core.BusyIndicator.hide(0);
+    return;
+  }
           //creating new object
           var NewUser = {
             applicantName: ApplicantName,
@@ -115,7 +121,7 @@ sap.ui.define([
             applicantSalary: ApplicantSalary,
             loanAmount: ApplicantLoanAmount,
             loanRepaymentMonths: ApplicantRepaymentMonths,
-            documentUrl: this.documentUrl 
+            document: this.documentUrl
           };
           //posting data
           var oModel=this.getView().getModel("mainModel");
@@ -124,6 +130,7 @@ sap.ui.define([
             urlParameters: NewUser,
             success: (data) => {
               sap.ui.core.BusyIndicator.hide(0);
+              console.log("✅ Submission success response:", data);
               MessageBox.success("You have applied for loan successfully\nYour loan id:"+ data.submitLoanApplication.Id, {
                 onClose: () => {
                   this.byId("enterApplicantName").setValue("");
@@ -186,46 +193,36 @@ sap.ui.define([
                 
                   var reader = new FileReader();
                   reader.onload = function (e) {
-                    var fileupArray = new Uint8Array(e.target.result);
+                    // Convert ArrayBuffer to base64 string
+                    var binary = '';
+                    var bytes = new Uint8Array(e.target.result);
+                    var len = bytes.byteLength;
+                    for (var i = 0; i < len; i++) {
+                      binary += String.fromCharCode(bytes[i]);
+                    }
+                    var base64Stringfile = btoa(binary);
                 
-                    // Compress the file data using pako
-                    var compressedData = pako.deflate(fileupArray);
+                    var oModel = this.getView().getModel("mainModel");
                 
-                    // Convert compressed data to a binary string
-                    var binaryString = Array.from(compressedData, byte => String.fromCharCode(byte)).join('');
-                
-                    // Convert binary string to Base64
-                    var base64Stringfile = btoa(binaryString);
-                    this.filebase64String = base64Stringfile;
-                
-                    // Call CAP function to upload the document
-                    var oModel = this.getView().getModel("mainModel"); // default model
-                    
-if (!oModel) {
-    sap.m.MessageBox.error("OData model 'mainModel' not found.");
-    return;
-  }  
                     oModel.callFunction("/uploadDocument", {
                       method: "POST",
                       urlParameters: {
                         fileName: file.name,
-                        fileContent: this.filebase64String
+                        fileContent: base64Stringfile
                       },
                       success: function (data) {
-                        this.documentUrl = data.fileUrl; // Save the returned file URL
+                        this.documentUrl = data.uploadDocument;
                         sap.m.MessageToast.show("File uploaded successfully.");
                       }.bind(this),
                       error: function (err) {
-                        console.error("Upload failed", err);
                         sap.m.MessageBox.error("File upload failed. Please try again.");
                       }
                     });
-                
                   }.bind(this);
                 
                   reader.readAsArrayBuffer(file);
                 }
-, 
+,                     
                 
         onClear: function(){
             this.byId("enterApplicantName").setValue("");

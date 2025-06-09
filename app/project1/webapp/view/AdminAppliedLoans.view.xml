@@ -288,9 +288,20 @@ class="content"
                 </HBox>
                  <HBox>
                  
+                 <HBox>
                 <HBox>
                     <Label  text="Address:" class="font customLabel1"/>
                     <Text  text="{mainModel>applicantAddress}" class="font customInput1" />
+               </HBox>
+               <HBox>
+  <Label text="Document:" class="font customLabel1" />
+  <Link 
+     text="{mainModel>document}" 
+     href="{mainModel>document}" 
+     target="_blank" 
+     class="font2 customInput2" 
+     visible="{= !!${mainModel>document} }" />
+</HBox>
                </HBox>
                <!-- <HBox>
            <Label text="Documents:" class="font customLabel1"/>

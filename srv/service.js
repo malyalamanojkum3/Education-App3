@@ -1,5 +1,4 @@
 const { tx } = require("@sap/cds");
-
 module.exports = cds.service.impl(function(){
   const { customer} = this.entities;
     function customIdGenerator(){
@@ -9,19 +8,35 @@ module.exports = cds.service.impl(function(){
         return Id;
     }
 
+   
+    const fs = require('fs');
+    const path = require('path');
+    
     this.on('uploadDocument', async (req) => {
       const { fileName, fileContent } = req.data;
-      // Decode the base64 content
       const buffer = Buffer.from(fileContent, 'base64');
-      // Simulate saving the file (e.g., to local disk, S3, or a database)
-      // For now, just return a dummy URL
+    
+      // Define the path to save the file
+      const dirPath = path.join(__dirname, 'files');
+      const filePath = path.join(dirPath, fileName);
+    
+      // Ensure the directory exists
+      if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true });
+      }
+    
+      // Save the file to disk
+      fs.writeFileSync(filePath, buffer);
+    
+      // Return the URL to access the file
       const fileUrl = `/files/${fileName}`;
-      // You can add logic here to actually store the file if needed
       return fileUrl;
     });
-  
+    
+
     this.on('submitLoanApplication', async req => {
         const data = req.data;
+        console.log("Document URL before submit:", this.documentUrl);
         const Id = customIdGenerator();
         // Insert into DB
         const result = await cds.tx(req).create(customer).entries({
@@ -36,7 +51,7 @@ module.exports = cds.service.impl(function(){
           loanAmount: data.loanAmount,
           loanRepaymentMonths: data.loanRepaymentMonths,
           loanStatus: "Pending",
-          document: data.documentUrl
+          document: data.document
         });
     
         return { Id };

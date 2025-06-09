@@ -84,6 +84,20 @@
     color: black;
     padding: 10px;
   }
+
+  .font2{
+    font-size: small;
+    color: black !important;
+    padding: 10px;
+  }
+
+  .customInput2 {
+    font-family: 'Times New Roman', Times, serif ;
+    font-size: medium;
+    width: 220px !important;
+    box-sizing: border-box !important;
+    background-color: white !important;
+  }
     
   .action {
      display: flex;
