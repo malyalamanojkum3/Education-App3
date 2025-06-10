@@ -36,6 +36,8 @@ sap.ui.define([
                         MessageToast.show("Login successful for: " + email);
                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                         oRouter.navTo("dashboard");
+                        this.byId("emailinput").setValue("");
+                        this.byId("passinput").setValue("");
                     } else {
                         MessageToast.show("Invalid username or password.");
                     }
@@ -45,6 +47,7 @@ sap.ui.define([
                     console.error(oError);
                 }
             });
+            
         },
 
         onTogglePasswordVisibility: function () {
@@ -94,7 +97,7 @@ sap.ui.define([
                 return;
             }
 
-            var passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+            var passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
             if (!passwordRegex.test(password)) {
                 MessageToast.show("Password must be at least 6 characters long and include both letters and numbers.");
                 return;
@@ -106,12 +109,15 @@ sap.ui.define([
             }
 
             var oModel = this.getView().getModel("mainModel");
+            
+            var userRole = email.includes("@ltimindtree.com") ? "Admin" : "Customer";
+
             var oNewUser = {
                 email: email,
                 password: password,
                 username: username,
                 mobileNumber: mobile,
-                userRole: "Admin"
+                userRole: userRole
             };
 
             // Check if user already exists
@@ -126,6 +132,11 @@ sap.ui.define([
                             success: function () {
                                 MessageToast.show("Registration successful!");
                                 this.onLogin(); // Switch to login view
+                                this.byId("regusername").setValue("");
+            this.byId("regmobile").setValue("");
+            this.byId("regemail").setValue("");
+            this.byId("regpass").setValue("");
+            this.byId("regpass1").setValue("");
                             }.bind(this),
                             error: function (oError) {
                                 MessageToast.show("Error during registration.");
@@ -139,6 +150,7 @@ sap.ui.define([
                     console.error("User check error:", oError);
                 }
             });
+            
         }
     });
 });
