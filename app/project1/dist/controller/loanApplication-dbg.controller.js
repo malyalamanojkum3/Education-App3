@@ -104,7 +104,7 @@ sap.ui.define([
             return;
             
           }    
-console.log("📦 Document URL before submit:", this.documentUrl);
+console.log("Document URL before submit:", this.documentUrl);
   if (!this.documentUrl) {
     sap.m.MessageBox.error("Please upload a document before submitting.");
     sap.ui.core.BusyIndicator.hide(0);
@@ -130,7 +130,7 @@ console.log("📦 Document URL before submit:", this.documentUrl);
             urlParameters: NewUser,
             success: (data) => {
               sap.ui.core.BusyIndicator.hide(0);
-              console.log("✅ Submission success response:", data);
+              console.log(" Submission success response:", data);
               MessageBox.success("You have applied for loan successfully\nYour loan id:"+ data.submitLoanApplication.Id, {
                 onClose: () => {
                   this.byId("enterApplicantName").setValue("");

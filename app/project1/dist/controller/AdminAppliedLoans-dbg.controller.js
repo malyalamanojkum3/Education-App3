@@ -12,13 +12,45 @@ sap.ui.define([
 
     return Controller.extend("project1.controller.AdminAppliedLoans", {
         
+        onInit: function() {
+        console.log("AdminAppliedLoans onInit called"); // Debug
+        this._pageSize = 10;
+        this._currentPage = 1;
+        sap.ui.core.BusyIndicator.show(0);
+        
+        // Create and set a JSONModel for paged data with initial values
+        this._pagedModel = new sap.ui.model.json.JSONModel({
+            pagedCustomer: [],
+            currentPage: 1,
+            totalPages: 1,
+            totalRecords: 0,
+            isPreviousEnabled: false,
+            isNextEnabled: false
+        });
+        this.getView().setModel(this._pagedModel, "pagedModel");
+        
+        var that = this;
+        function tryLoad() {
+            var oModel = that.getView().getModel("mainModel");
+            if (oModel) {
+                oModel.metadataLoaded().then(function() {
+                    that._loadPage(that._currentPage);
+                    sap.ui.core.BusyIndicator.hide();
+                });
+            } else {
+                setTimeout(tryLoad, 200);
+            }
+        }
+        tryLoad();
+    },
        
         onViewDetails: function (oEvent) {
             sap.ui.core.BusyIndicator.show(0);
-            var oItem = oEvent.getSource().getBindingContext("mainModel");
+            var oRowContext = oEvent.getSource().getBindingContext("pagedModel");
             var oDialog = this.byId("customerDetailsDialog");
-            oDialog.setBindingContext(oItem,"mainModel");
-            oDialog.open(sap.ui.core.BusyIndicator.hide());
+            oDialog.setBindingContext(oRowContext, "pagedModel");
+            oDialog.open();
+            sap.ui.core.BusyIndicator.hide();
         },
 
         onCloseDialog: function () {
@@ -29,9 +61,10 @@ sap.ui.define([
             sap.ui.core.BusyIndicator.show(0);
         
             var oDialog = this.byId("customerDetailsDialog");
-            var oContext = oDialog.getBindingContext("mainModel");
+            var oContext = oDialog.getBindingContext("pagedModel");
             var oModel = this.getView().getModel("mainModel");
             var oData = oContext.getObject();
+            var that = this;
         
             oModel.callFunction("/approveLoan", {
                 method: "POST", 
@@ -39,6 +72,8 @@ sap.ui.define([
                 success: function () {
                     sap.ui.core.BusyIndicator.hide(); 
                     oModel.refresh();
+                    // Refresh the current page data
+                    that._loadPage(that._currentPage);
                     MessageToast.show("Loan Approved");
                     oDialog.close();
                 },
@@ -54,9 +89,10 @@ sap.ui.define([
             sap.ui.core.BusyIndicator.show(0);
         
             var oDialog = this.byId("customerDetailsDialog");
-            var oContext = oDialog.getBindingContext("mainModel");
+            var oContext = oDialog.getBindingContext("pagedModel");
             var oModel = this.getView().getModel("mainModel");
             var oData = oContext.getObject();
+            var that = this;
         
             oModel.callFunction("/rejectLoan", {
                 method: "POST", 
@@ -64,6 +100,8 @@ sap.ui.define([
                 success: function () {
                     sap.ui.core.BusyIndicator.hide(); 
                     oModel.refresh();
+                    // Refresh the current page data
+                    that._loadPage(that._currentPage);
                     MessageToast.show("Loan Rejected");
                     oDialog.close();
                 },
@@ -90,33 +128,41 @@ sap.ui.define([
        
         onSearch: function (oEvent) 
         {
-          //var sQurey = oEvent.getParameter("query");
-          var sQurey = oEvent.getSource().getValue();
-          var filterConditions = [
-            new Filter("applicantName", FilterOperator.Contains, sQurey),
-            new Filter("applicantEmail", FilterOperator.Contains, sQurey),
-            new Filter("applicantPHno", FilterOperator.Contains, sQurey),
-            new Filter("applicantAadhar", FilterOperator.Contains, sQurey),
-            //new Filter("Id", FilterOperator.Contains, sQurey)
-
-        ];
-        var combinedFilters=new Filter({
-            filters: filterConditions,
-            and: false
-        })
+          // Note: With server-side pagination, search should ideally be handled by the server
+          // For now, this applies client-side filtering to the current page data
+          var sQuery = oEvent.getSource().getValue();
           var oTable = this.byId("loanList");
           var oBinding = oTable.getBinding("rows");
-          oBinding.filter(combinedFilters);
+          
+          if (sQuery) {
+            var filterConditions = [
+              new Filter("applicantName", FilterOperator.Contains, sQuery),
+              new Filter("applicantEmail", FilterOperator.Contains, sQuery),
+              new Filter("applicantPHno", FilterOperator.Contains, sQuery),
+              new Filter("applicantAadhar", FilterOperator.Contains, sQuery)
+            ];
+            var combinedFilters = new Filter({
+              filters: filterConditions,
+              and: false
+            });
+            oBinding.filter(combinedFilters);
+          } else {
+            oBinding.filter([]);
+          }
         },
       
         onReset: function(){
-        var oTable = this.byId("loanList");
+          // Reset filters and search
+          var oTable = this.byId("loanList");
           var oBinding = oTable.getBinding("rows");
           oBinding.filter([]);
           oBinding.sort([]);
           this.getView().byId("querySearch").setValue("");
-          this.getView().byId("statusComboBox").setValue("All");
-          this.getView().byId("GroupBy").setValue(""); 
+          this.getView().byId("statusComboBox").setSelectedKey("All");
+          
+          // Reload the first page to reset pagination
+          this._currentPage = 1;
+          this._loadPage(this._currentPage);
         },      
         
 onSort: function () {
@@ -307,19 +353,68 @@ onSort: function () {
                    
 isPending: function (status) {
          return status === "Pending";
-    }   
-    
-// onDocumentPress: function (oEvent) {
-//         const oItem = oEvent.getSource();
-//         const sContent = oItem.getBindingContext("mainModel").getProperty("content");
-//         if (sContent) {
-//             const win = window.open();
-//             win.document.write('<iframe src="' + sContent + '" frameborder="0" style="width:100%;height:100%;"></iframe>');
-//         } else {
-//             MessageToast.show("No document content available.");
-//         }
-//     }
+    },
 
-                        
+    _loadPage: function(page) {
+        console.log("_loadPage called with page:", page); // Debug
+        this._currentPage = page;
+        var oModel = this.getView().getModel("mainModel");
+        var that = this;
+        oModel.callFunction("/getPagedCustomers", {
+            method: "GET",
+            urlParameters: {
+                page: page,
+                pageSize: this._pageSize
+            },
+            success: function(oData) {
+                console.log("Data loaded for page:>>>>", page, oData); // Debug
+                
+                // Handle the response structure - check if it's nested under getPagedCustomers
+                const res = oData.getPagedCustomers || oData;
+                const results = res.results || res || [];
+                const totalCount = res.totalCount || (results.length > 0 ? results.length : 0);
+                
+                that._pagedModel.setProperty("/pagedCustomer", results);
+                var totalRecords = totalCount;
+                var totalPages = totalRecords > 0 ? Math.ceil(totalRecords / that._pageSize) : 1;
+                
+                console.log("Total Records:", totalRecords, "Total Pages:", totalPages); // Debug
+                that._pagedModel.setProperty("/currentPage", page);
+                that._pagedModel.setProperty("/totalPages", totalPages);
+                that._pagedModel.setProperty("/totalRecords", totalRecords);
+                that._pagedModel.setProperty("/isPreviousEnabled", page > 1);
+                that._pagedModel.setProperty("/isNextEnabled", page < totalPages);
+            },
+            error: function() {
+                sap.m.MessageToast.show("Failed to load data for page " + page);
+            }
+        });
+    },
+
+    onPreviousPage: function() {
+        if (this._currentPage > 1) {
+            this._currentPage--;
+            this._loadPage(this._currentPage);
+        }
+    },
+
+    onNextPage: function() {
+        var totalPages = this._pagedModel.getProperty("/totalPages");
+        if (this._currentPage < totalPages) {
+            this._currentPage++;
+            this._loadPage(this._currentPage);
+        }
+    },
+
+    onFirstPage: function() {
+        this._currentPage = 1;
+        this._loadPage(this._currentPage);
+    },
+
+    onLastPage: function() {
+        var totalPages = this._pagedModel.getProperty("/totalPages");
+        this._currentPage = totalPages;
+        this._loadPage(this._currentPage);
+    }                   
     });
 })

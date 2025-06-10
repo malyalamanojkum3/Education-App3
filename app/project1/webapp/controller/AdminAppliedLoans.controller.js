@@ -415,19 +415,6 @@ isPending: function (status) {
         var totalPages = this._pagedModel.getProperty("/totalPages");
         this._currentPage = totalPages;
         this._loadPage(this._currentPage);
-    }   
-    
-// onDocumentPress: function (oEvent) {
-//         const oItem = oEvent.getSource();
-//         const sContent = oItem.getBindingContext("mainModel").getProperty("content");
-//         if (sContent) {
-//             const win = window.open();
-//             win.document.write('<iframe src="' + sContent + '" frameborder="0" style="width:100%;height:100%;"></iframe>');
-//         } else {
-//             MessageToast.show("No document content available.");
-//         }
-//     }
-
-                        
+    }                   
     });
 })

@@ -10,7 +10,7 @@ type LoanStatus : String enum{
    Rejected;
 }
  entity userDetails{
-    key Id : Integer;
+    key Id : UUID;
     email : String;
     password: String;
     username: String;
