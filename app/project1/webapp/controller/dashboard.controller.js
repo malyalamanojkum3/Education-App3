@@ -8,7 +8,9 @@ sap.ui.define([
   return Controller.extend("project1.controller.dashboard", {
 
     onInit: function () {
+      
       const oModel = new sap.ui.model.json.JSONModel({
+        
         tiles: [
           {
             title: "Apply Loan",
