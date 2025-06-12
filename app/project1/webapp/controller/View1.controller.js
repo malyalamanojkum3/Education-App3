@@ -13,39 +13,32 @@ sap.ui.define([
         OnLoginbutton: function () {
             var email = this.byId("emailinput").getValue();
             var password = this.byId("passinput").getValue();
-
+        
             if (!email || !password) {
                 MessageToast.show("Please enter both email and password.");
                 return;
             }
-
+        
             var oModel = this.getView().getModel("mainModel");
-
-            var sFilter = new sap.ui.model.Filter({
-                filters: [
-                    new sap.ui.model.Filter("email", sap.ui.model.FilterOperator.EQ, email),
-                    new sap.ui.model.Filter("password", sap.ui.model.FilterOperator.EQ, password)
-                ],
-                and: true
-            });
-
-            oModel.read("/user", {
-                filters: [sFilter],
+        
+            oModel.callFunction("/loginUser", {
+                method: "POST",
+                urlParameters: {
+                    email: email,
+                    password: password
+                },
                 success: function (oData) {
-                    if (oData.results && oData.results.length > 0) {
-                        MessageToast.show("Login successful for: " + email);
-                        var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-                        oRouter.navTo("dashboard");
-                    } else {
-                        MessageToast.show("Invalid username or password.");
-                    }
+                    MessageToast.show("login successfull");
+                    var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                    oRouter.navTo("dashboard");
                 }.bind(this),
                 error: function (oError) {
-                    MessageToast.show("Error during login. Please try again.");
-                    console.error(oError);
+                    MessageToast.show("Invalid email or password.");
+                    console.error("Login error:", oError);
                 }
             });
-        },
+        }
+        ,
 
         onTogglePasswordVisibility: function () {
             var oInput = this.byId("passinput");
@@ -94,7 +87,8 @@ sap.ui.define([
                 return;
             }
 
-            var passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+            var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\S]{6,12}$/;
+
             if (!passwordRegex.test(password)) {
                 MessageToast.show("Password must be at least 6 characters long and include both letters and numbers.");
                 return;
@@ -122,7 +116,15 @@ sap.ui.define([
                         MessageToast.show("User already exists. Please login.");
                     } else {
                         // Create new user
-                        oModel.create("/user", oNewUser, {
+                        
+oModel.callFunction("/registerUser", {
+         method: "POST",
+         urlParameters: {
+         email: email,
+         password: password,
+         username: username,
+         mobileNumber: mobile
+     },    
                             success: function () {
                                 MessageToast.show("Registration successful!");
                                 this.onLogin(); // Switch to login view
