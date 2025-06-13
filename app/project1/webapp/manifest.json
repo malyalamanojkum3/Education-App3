@@ -94,14 +94,14 @@
       "routes": [
         {
           "name": "RouteView1",
-          "pattern": "RouteView1",
+          "pattern": ":?query:",
           "target": [
             "TargetView1"
           ]
         },
         {
           "name": "dashboard",
-          "pattern": ":?query:",
+          "pattern": "dashboard",
           "target": [
             "Targetdashboard"
           ]
