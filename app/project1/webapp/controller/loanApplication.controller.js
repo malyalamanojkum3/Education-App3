@@ -8,6 +8,35 @@ sap.ui.define([
 
     return Controller.extend("project1.controller.loanApplication", {
       
+        onInit: function() {
+            // Pre-fill user information from session storage
+            var loggedInUserData = sessionStorage.getItem("loggedInUser");
+            
+            if (loggedInUserData) {
+                var userData = JSON.parse(loggedInUserData);
+                
+                // Set user data to form fields when the view is rendered
+                this.getView().addEventDelegate({
+                    onAfterRendering: function() {
+                        // Pre-fill user information
+                        var nameField = this.byId("enterApplicantName");
+                        var emailField = this.byId("enterEmailId");
+                        var mobileField = this.byId("enterApplicantMobileNo");
+                        
+                        if (nameField && !nameField.getValue()) {
+                            nameField.setValue(userData.username);
+                        }
+                        if (emailField && !emailField.getValue()) {
+                            emailField.setValue(userData.email);
+                        }
+                        if (mobileField && !mobileField.getValue()) {
+                            mobileField.setValue(userData.mobileNumber);
+                        }
+                    }.bind(this)
+                });
+            }
+        },
+        
     onAfterRendering: function () {
       const aInputs = [
           "enterApplicantName",
@@ -374,7 +403,9 @@ console.log("Document URL before submit:", this.documentUrl);
             }
           },
           onLogout: function () {
-        
+            // Clear session storage
+            sessionStorage.removeItem("loggedInUser");
+            
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("RouteView1");
             MessageToast.show("Logged out!");

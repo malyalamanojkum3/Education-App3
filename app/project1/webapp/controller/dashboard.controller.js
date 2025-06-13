@@ -84,7 +84,9 @@ sap.ui.define([
 
     onLogout: function () {
       sap.ui.getCore().setModel(null, "UserModel");
-      localStorage.removeItem("UserData");
+      localStorage.removeItem("UserData");      // Clear session storage
+      sessionStorage.removeItem("loggedInUser");
+      
       var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
       oRouter.navTo("RouteView1");
       MessageToast.show("Logged out!");

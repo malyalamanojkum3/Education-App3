@@ -30,7 +30,7 @@
     </content>
         <content>
         <VBox class="profileWrapper" >
-          <Panel headerText="Profile Information"  class="profilepanelheader sapUiResponsiveMargin" expandable="false">
+          <Panel headerText="Personal Information"  class="profilepanelheader sapUiResponsiveMargin" expandable="false">
             <f:SimpleForm
               editable="false"
               layout="ResponsiveGridLayout"
@@ -50,7 +50,19 @@
  
               <Label text="Address"/>
               <Text text="{/address}" />
- 
+              
+            </f:SimpleForm>
+          </Panel>
+          
+          <Panel headerText="Loan Information"  class="profilepanelheader sapUiResponsiveMargin" expandable="false">
+            <f:SimpleForm
+              editable="false"
+              layout="ResponsiveGridLayout"
+              labelSpanL="4"
+              labelSpanM="4"
+              columnsL="2"
+              columnsM="2">
+
               <Label text="Loan ID"/>
               <Text text="{/loanId}" />
  

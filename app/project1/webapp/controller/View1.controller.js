@@ -46,6 +46,16 @@ sap.ui.define([
           success: function (oData) {
             if (oData.results && oData.results.length > 0) {
               const user = oData.results[0];
+                        // Store logged-in user data in session storage
+                        var loggedInUser = oData.results[0];
+                        sessionStorage.setItem("loggedInUser", JSON.stringify({
+                            id: loggedInUser.Id,
+                            email: loggedInUser.email,
+                            username: loggedInUser.username,
+                            mobileNumber: loggedInUser.mobileNumber,
+                            userRole: loggedInUser.userRole
+                        }));
+                        
               MessageToast.show("Login successful for: " + email);
    
               const userData = {

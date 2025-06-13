@@ -112,12 +112,12 @@ sap.ui.define([
             });
         },
         onLogout: function () {
-
+            // Clear session storage
+            sessionStorage.removeItem("loggedInUser");
+            
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("RouteView1");
             MessageToast.show("Logged out!");
-
-
         },
         onHome: function () {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
