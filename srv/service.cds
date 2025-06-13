@@ -6,22 +6,6 @@ service myService{
     action uploadDocument(
         fileName: String, 
         fileContent: String) returns String;
-    
-
-  action registerUser(
-    email: String,
-    password: String,
-    username: String,
-    mobileNumber: String
-  )returns String;
-
-  // Define the loginUser action
-  action loginUser(
-    email: String,
-    password: String
-  )returns {
-     message: String;
-  };
     action submitLoanApplication(
         applicantName : String,
         applicantAddress : String,

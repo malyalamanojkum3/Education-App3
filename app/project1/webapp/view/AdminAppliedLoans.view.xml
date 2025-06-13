@@ -53,8 +53,8 @@
     </Bar>
     
     </content>
-    <VBox id="_IDGenVBox" class="pageContainer" fitContainer="false">
-        <ScrollContainer id="scrollContainer" height="calc(100vh - 300px)" width="100%" vertical="true" visible="true">
+    <VBox id="_IDGenVBox" class="pageContainer" fitContainer="true">
+        <ScrollContainer id="scrollContainer" height="auto" width="100%" vertical="true" visible="true">
         <table:Table
     id="loanList"
     rows="{pagedModel>/pagedCustomer}"
@@ -65,7 +65,7 @@
     class="tableclass"
     >
     <table:rowMode >
-    <rowmodes:Fixed rowContentHeight="43" />
+    <rowmodes:Fixed rowContentHeight="36" />
     </table:rowMode>
 
     

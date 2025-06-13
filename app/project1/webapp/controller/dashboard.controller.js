@@ -1,10 +1,12 @@
 sap.ui.define([
   "sap/ui/core/mvc/Controller",
-  "sap/m/MessageToast"
-], function (Controller, MessageToast) {
+  "sap/m/MessageToast",
+  "sap/ui/core/Fragment"
+], function (Controller, MessageToast, Fragment) {
   "use strict";
 
   return Controller.extend("project1.controller.dashboard", {
+
     onInit: function () {
       let oUserModel = sap.ui.getCore().getModel("UserModel");
 
@@ -53,14 +55,15 @@ sap.ui.define([
         });
       }
 
-      const oModel = new sap.ui.model.json.JSONModel({
-        tiles: tiles,
-        tiles1: tiles1
-      });
+      
+        
+        
+
       this.getView().setModel(oModel);
     },
 
     onTilePress: function (oEvent) {
+      // Get the key from customData in the first child of GridListItem (VBox)
       const key = oEvent.getSource().getContent()[0].getCustomData()[0].getValue();
       const router = sap.ui.core.UIComponent.getRouterFor(this);
 
@@ -83,11 +86,13 @@ sap.ui.define([
     },
 
     onLogout: function () {
-      sap.ui.getCore().setModel(null, "UserModel");
-      localStorage.removeItem("UserData");
+
       var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
       oRouter.navTo("RouteView1");
       MessageToast.show("Logged out!");
+
+      
     }
+
   });
 });

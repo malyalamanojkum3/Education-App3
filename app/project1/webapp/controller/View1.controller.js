@@ -1,9 +1,9 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast"
-  ], (Controller, MessageToast) => {
+], (Controller, MessageToast) => {
     "use strict";
-   
+
     return Controller.extend("project1.controller.View1", {
       onInit() {
         sap.ui.core.BusyIndicator.show(0);
@@ -178,5 +178,4 @@ sap.ui.define([
         });
       }
     });
-  });
-   
+});

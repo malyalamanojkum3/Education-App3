@@ -12,7 +12,7 @@ type LoanStatus : String enum{
  entity userDetails{
     key Id : UUID;
     email : String;
-    password: String(200);
+    password: String;
     username: String;
     mobileNumber: String;
     userRole: UserRole;

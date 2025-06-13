@@ -1,6 +1,4 @@
 const { tx } = require("@sap/cds");
-
-
 module.exports = cds.service.impl(function(){
   const { customer} = this.entities;
     function customIdGenerator(){
@@ -35,49 +33,7 @@ module.exports = cds.service.impl(function(){
       return fileUrl;
     });
     
-    const bcrypt = require('bcrypt');
 
-    this.on('registerUser', async (req) => {
-      const { email, password, username, mobileNumber } = req.data;
-    
-      const hashedPassword = await bcrypt.hash(password, 10);
-      console.log("Hashed password:", hashedPassword);
-
-      await cds.tx(req).run(
-        INSERT.into('loanApp.db.userDetails').entries({
-          email,
-          password: hashedPassword,
-          username,
-          mobileNumber,
-          userRole: 'Admin'
-        })
-      );
-      console.log("RegisterUser called with:", req.data);
-      return { message: 'User registered successfully' };
-    });
-
-    this.on('loginUser', async (req) => {
-      const { email, password } = req.data;
-    
-      const users = await cds.tx(req).run(
-        SELECT.from('loanApp.db.userDetails').where({ email })
-      );
-    
-      if (users.length === 0) {
-        return req.error(403, 'Invalid email or password');
-      }
-    
-      const isMatch = await bcrypt.compare(password, users[0].password);
-      if (!isMatch) {
-        return req.error(403, 'Invalid email or password'); 
-      }      
-      
-      console.log("LoginUser called with:", req.data);
-      
-      return { message: 'Login successful', user: users[0] };
-    });
-    
-    
     this.on('submitLoanApplication', async req => {
         const data = req.data;
         console.log("Document URL before submit:", this.documentUrl);
