@@ -10,7 +10,8 @@
     "@cap-js/hana": "^1",
     "@sap/cds": "^8",
     "@sap/xssec": "^4",
-    "express": "^4"
+    "express": "^4",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@cap-js/cds-types": "^0.10.0",

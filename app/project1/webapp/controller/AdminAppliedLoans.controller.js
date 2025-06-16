@@ -13,6 +13,8 @@ sap.ui.define([
     return Controller.extend("project1.controller.AdminAppliedLoans", {
         
         onInit: function() {
+            this._selectedFile = null; 
+
         console.log("AdminAppliedLoans onInit called"); // Debug
         this._pageSize = 10;
         this._currentPage = 1;
@@ -415,6 +417,38 @@ isPending: function (status) {
         var totalPages = this._pagedModel.getProperty("/totalPages");
         this._currentPage = totalPages;
         this._loadPage(this._currentPage);
-    }                   
+    },
+    //importing Excel data
+    
+    onFileSelected: function (oEvent) {
+         this._selectedFile = oEvent.getParameter("files")[0];
+        },
+    
+    onUploadExcel: function (oEvent) {
+        
+        if (!this._selectedFile) {
+             MessageToast.show("Please select a file first.");
+             return;
+             }
+    
+        const file = this._selectedFile;
+        const reader = new FileReader();
+    
+        reader.onload = (e) => {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: "array" });
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            const jsonData = XLSX.utils.sheet_to_json(sheet);
+    
+            // Send to backend
+            //this._sendDataToCAPM(jsonData);
+            console.log("jsonData",jsonData);//
+        };
+    
+        reader.readAsArrayBuffer(file);
+    }
+    
+                       
     });
 })
