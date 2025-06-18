@@ -26,6 +26,23 @@
     <contentLeft >
     <Text text="Applied Loans" class="subHeader" />
     </contentLeft>
+    <contentMiddle>
+    <!-- Bulk Action Buttons -->
+    <HBox visible="{pagedModel>/hasSelection}" class="sapUiTinyMargin">
+        <Text text="{pagedModel>/selectedCount} selected" class="sapUiMediumMarginEnd"/>
+        <Button 
+            text="Approve Selected" 
+            type="Emphasized" 
+            icon="sap-icon://accept"
+            press="onBulkApprove" 
+            class="sapUiTinyMarginEnd"/>
+        <Button 
+            text="Reject Selected" 
+            type="Reject" 
+            icon="sap-icon://decline"
+            press="onBulkReject"/>
+    </HBox>
+    </contentMiddle>
     <contentRight>
         
         <HBox class="sapUiSmallMargin">
@@ -92,6 +109,22 @@
     
 
     <table:columns>
+        <table:Column width="60px">
+            <table:label>
+                <CheckBox id="selectAllCheckBox" 
+                    text="" 
+                    select="onSelectAllChange"
+                    tooltip="Select All Pending Loans"/>
+            </table:label>
+            <table:template>
+                <CheckBox 
+                    selected="{pagedModel>selected}" 
+                    select="onItemSelectionChange"
+                    enabled="{= ${pagedModel>loanStatus} === 'Pending' }"
+                    tooltip="{= ${pagedModel>loanStatus} === 'Pending' ? 'Select for bulk action' : 'Only pending loans can be selected' }"/>
+            </table:template>
+        </table:Column>
+
         <table:Column sortProperty="Id" filterProperty="Id">
             <table:label>
                 <Label text="ID" />
