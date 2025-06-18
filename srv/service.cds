@@ -25,4 +25,5 @@ service myService{
         results: array of {};
         totalCount: Integer;
     };
+    action bulkUpload(jsonData: String) returns {};
 }

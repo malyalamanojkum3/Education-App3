@@ -1,4 +1,5 @@
 const { tx } = require("@sap/cds");
+const { v4: uuidv4 } = require('uuid');
 module.exports = cds.service.impl(function(){
   const { customer} = this.entities;
     function customIdGenerator(){
@@ -8,6 +9,16 @@ module.exports = cds.service.impl(function(){
         return Id;
     }
 
+    function Bulkvalidation(data){
+      const validRecords = data.filter((record, index) => {
+        if (!record.applicantName || !record.Id) {
+            console.warn(`Skipping row ${index + 1}: Missing required fields`);
+            return false;
+        }
+        return true;
+    });
+    return validRecords;
+    }
    
     const fs = require('fs');
     const path = require('path');
@@ -105,5 +116,41 @@ module.exports = cds.service.impl(function(){
             results,
             totalCount
         };
-      });
+      }),
+
+
+      this.on("bulkUpload", async (req) => {
+        
+      const {jsonData} = req.data;
+        //console.log("jsonData",jsonData);
+      
+        try {
+          const data = JSON.parse(jsonData);
+          //console.log("data",data);
+            if (!data || !Array.isArray(data) || data.length === 0) {
+                return req.error(400, 'No data provided or data is not an array');
+            }
+    
+            const tx = cds.transaction(req);
+            const validRecords = Bulkvalidation(data);
+            if (validRecords.length === 0) {
+                return req.error(400, 'No valid records found');
+            }
+
+            // Batch insert
+            await tx.run(INSERT.into(customer).entries(validRecords));
+            
+            return {
+                message: 'Records upload successful',
+                totalRecords: data.length,
+                insertedRecords: validRecords.length,
+                skippedRecords: data.length - validRecords.length
+            };
+            
+        } catch (error) {
+            console.error('Bulk upload error:', error);
+            return req.error(500, `Bulk upload failed: ${error.message}`);
+        }
+    });
+          
     })

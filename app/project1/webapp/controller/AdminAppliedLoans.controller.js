@@ -1,3 +1,4 @@
+
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast",
@@ -441,9 +442,21 @@ isPending: function (status) {
             const sheet = workbook.Sheets[sheetName];
             const jsonData = XLSX.utils.sheet_to_json(sheet);
     
-            // Send to backend
-            //this._sendDataToCAPM(jsonData);
             console.log("jsonData",jsonData);//
+            const oModel = this.getView().getModel("mainModel");
+            oModel.callFunction("/bulkUpload",{
+                method:"POST",
+                urlParameters:{
+                    jsonData: JSON.stringify(jsonData)
+                },
+                success:(data)=>{
+                    console.log("sucess Data :",data);
+                    MessageToast.show("Bulk data is inserted");
+                },
+                error:(error)=>{
+                    console.log("error Data :",error);
+                }
+            })
         };
     
         reader.readAsArrayBuffer(file);
