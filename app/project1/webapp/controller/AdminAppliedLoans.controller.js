@@ -451,6 +451,7 @@ isPending: function (status) {
                 },
                 success:(data)=>{
                     console.log("sucess Data :",data);
+                    this._loadPage(this._currentPage);
                     MessageToast.show("Bulk data is inserted");
                 },
                 error:(error)=>{
