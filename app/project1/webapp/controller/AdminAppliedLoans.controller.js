@@ -2,12 +2,13 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast",
+    "sap/m/MessageBox",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "sap/ui/model/odata/v2/ODataModel",
     
     
-], function (Controller, MessageToast, Filter,FilterOperator,ODataModel) {
+], function (Controller, MessageToast, MessageBox, Filter, FilterOperator, ODataModel) {
     "use strict";
     
 
@@ -19,6 +20,7 @@ sap.ui.define([
         console.log("AdminAppliedLoans onInit called"); // Debug
         this._pageSize = 10;
         this._currentPage = 1;
+        this._selectedLoans = []; // Track selected loans
         sap.ui.core.BusyIndicator.show(0);
         
         // Create and set a JSONModel for paged data with initial values
@@ -28,7 +30,9 @@ sap.ui.define([
             totalPages: 1,
             totalRecords: 0,
             isPreviousEnabled: false,
-            isNextEnabled: false
+            isNextEnabled: false,
+            selectedCount: 0,
+            hasSelection: false
         });
         this.getView().setModel(this._pagedModel, "pagedModel");
         
@@ -377,6 +381,15 @@ isPending: function (status) {
                 const results = res.results || res || [];
                 const totalCount = res.totalCount || (results.length > 0 ? results.length : 0);
                 
+                // Initialize selected property for each item
+                results.forEach(function(item) {
+                    item.selected = false;
+                });
+                
+                // Clear selections when loading new page
+                that._selectedLoans = [];
+                that._updateSelectionState();
+                
                 that._pagedModel.setProperty("/pagedCustomer", results);
                 var totalRecords = totalCount;
                 var totalPages = totalRecords > 0 ? Math.ceil(totalRecords / that._pageSize) : 1;
@@ -418,6 +431,177 @@ isPending: function (status) {
         var totalPages = this._pagedModel.getProperty("/totalPages");
         this._currentPage = totalPages;
         this._loadPage(this._currentPage);
+    },
+    // Checkbox selection methods
+        onSelectAllChange: function(oEvent) {
+            var bSelected = oEvent.getParameter("selected");
+            var aData = this._pagedModel.getData().pagedCustomer;
+            
+            // Clear existing selections
+            this._selectedLoans = [];
+            
+            // Update all items selection state
+            aData.forEach(function(item) {
+                item.selected = bSelected;
+                if (bSelected && item.loanStatus === "Pending") {
+                    this._selectedLoans.push(item.Id);
+                }
+            }.bind(this));
+            
+            this._updateSelectionState();
+            this._pagedModel.refresh();
+        },
+
+        onItemSelectionChange: function(oEvent) {
+            var bSelected = oEvent.getParameter("selected");
+            var oBindingContext = oEvent.getSource().getBindingContext("pagedModel");
+            var sLoanId = oBindingContext.getProperty("Id");
+            var sLoanStatus = oBindingContext.getProperty("loanStatus");
+            
+            // Only allow selection of pending loans
+            if (bSelected && sLoanStatus !== "Pending") {
+                oEvent.getSource().setSelected(false);
+                MessageToast.show("Only pending loans can be selected for bulk actions");
+                return;
+            }
+            
+            // Update the item's selected state
+            oBindingContext.getModel().setProperty(oBindingContext.getPath() + "/selected", bSelected);
+            
+            // Update selected loans array
+            if (bSelected) {
+                if (this._selectedLoans.indexOf(sLoanId) === -1) {
+                    this._selectedLoans.push(sLoanId);
+                }
+            } else {
+                var iIndex = this._selectedLoans.indexOf(sLoanId);
+                if (iIndex > -1) {
+                    this._selectedLoans.splice(iIndex, 1);
+                }
+            }
+            
+            this._updateSelectionState();
+        },
+
+        _updateSelectionState: function() {
+            var iSelectedCount = this._selectedLoans.length;
+            var bHasSelection = iSelectedCount > 0;
+            
+            this._pagedModel.setProperty("/selectedCount", iSelectedCount);
+            this._pagedModel.setProperty("/hasSelection", bHasSelection);
+            
+            // Update select all checkbox state
+            var oSelectAllCheckBox = this.byId("selectAllCheckBox");
+            if (oSelectAllCheckBox) {
+                var aData = this._pagedModel.getData().pagedCustomer;
+                var aPendingLoans = aData.filter(function(item) {
+                    return item.loanStatus === "Pending";
+                });
+                var aSelectedPendingLoans = aPendingLoans.filter(function(item) {
+                    return item.selected;
+                });
+                
+                if (aSelectedPendingLoans.length === 0) {
+                    oSelectAllCheckBox.setSelected(false);
+                    oSelectAllCheckBox.setPartiallySelected(false);
+                } else if (aSelectedPendingLoans.length === aPendingLoans.length) {
+                    oSelectAllCheckBox.setSelected(true);
+                    oSelectAllCheckBox.setPartiallySelected(false);
+                } else {
+                    oSelectAllCheckBox.setSelected(false);
+                    oSelectAllCheckBox.setPartiallySelected(true);
+                }
+            }
+        },
+
+        onBulkApprove: function() {
+            if (this._selectedLoans.length === 0) {
+                MessageToast.show("Please select loans to approve");
+                return;
+            }
+            
+            sap.m.MessageBox.confirm(
+                "Are you sure you want to approve " + this._selectedLoans.length + " selected loan(s)?",
+                {
+                    title: "Confirm Bulk Approval",
+                    onClose: function(oAction) {
+                        if (oAction === sap.m.MessageBox.Action.OK) {
+                            this._performBulkAction("approve");
+                        }
+                    }.bind(this)
+                }
+            );
+        },
+
+        onBulkReject: function() {
+            if (this._selectedLoans.length === 0) {
+                MessageToast.show("Please select loans to reject");
+                return;
+            }
+            
+            sap.m.MessageBox.confirm(
+                "Are you sure you want to reject " + this._selectedLoans.length + " selected loan(s)?",
+                {
+                    title: "Confirm Bulk Rejection",
+                    onClose: function(oAction) {
+                        if (oAction === sap.m.MessageBox.Action.OK) {
+                            this._performBulkAction("reject");
+                        }
+                    }.bind(this)
+                }
+            );
+        },
+
+        _performBulkAction: function(sAction) {
+            sap.ui.core.BusyIndicator.show(0);
+            var oModel = this.getView().getModel("mainModel");
+            var aPromises = [];
+            var that = this;
+            
+            this._selectedLoans.forEach(function(sLoanId) {
+                var sMethod = sAction === "approve" ? "/approveLoan" : "/rejectLoan";
+                var oPromise = new Promise(function(resolve, reject) {
+                    oModel.callFunction(sMethod, {
+                        method: "POST",
+                        urlParameters: {
+                            Id: sLoanId
+                        },
+                        success: function(oData) {
+                            resolve({ loanId: sLoanId, success: true });
+                        },
+                        error: function(oError) {
+                            resolve({ loanId: sLoanId, success: false, error: oError });
+                        }
+                    });
+                });
+                aPromises.push(oPromise);
+            });
+            
+            Promise.all(aPromises).then(function(aResults) {
+                sap.ui.core.BusyIndicator.hide();
+                
+                var iSuccessCount = aResults.filter(function(result) {
+                    return result.success;
+                }).length;
+                var iErrorCount = aResults.length - iSuccessCount;
+                
+                var sMessage = sAction === "approve" ? "approved" : "rejected";
+                if (iSuccessCount > 0) {
+                    MessageToast.show(iSuccessCount + " loan(s) " + sMessage + " successfully");
+                }
+                if (iErrorCount > 0) {
+                    MessageToast.show(iErrorCount + " loan(s) failed to be " + sMessage);
+                }
+                
+                // Clear selections and refresh data
+                that._selectedLoans = [];
+                that._updateSelectionState();
+                that._loadPage(that._currentPage);
+                oModel.refresh();
+            });
+        },
+    });
+});
     },
     //importing Excel data
     

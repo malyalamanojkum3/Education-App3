@@ -15,7 +15,7 @@ sap.ui.define([
           const oUserModel = new sap.ui.model.json.JSONModel(JSON.parse(userData));
           sap.ui.getCore().setModel(oUserModel, "UserModel");
           const oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-          oRouter.navTo("dashboard");
+          //oRouter.navTo("dashboard");
         }
       },
    
@@ -27,10 +27,7 @@ sap.ui.define([
           MessageToast.show("Please enter both email and password.");
           return;
         }
-   
         const oModel = this.getView().getModel("mainModel");
-        
-   
         const sFilter = new sap.ui.model.Filter({
           filters: [
             new sap.ui.model.Filter("email", sap.ui.model.FilterOperator.EQ, email),
