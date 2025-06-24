@@ -600,9 +600,7 @@ isPending: function (status) {
                 oModel.refresh();
             });
         },
-    });
-});
-    },
+    
     //importing Excel data
     
     onFileSelected: function (oEvent) {
@@ -634,9 +632,10 @@ isPending: function (status) {
                     jsonData: JSON.stringify(jsonData)
                 },
                 success:(data)=>{
+                    const {insertedRecordsCount,skippedRecordsCount,totalRecordsCount } = data.bulkUpload;
                     console.log("sucess Data :",data);
                     this._loadPage(this._currentPage);
-                    MessageToast.show("Bulk data is inserted");
+                    MessageBox.success(`${insertedRecordsCount} out of ${totalRecordsCount} records are uploaded`);
                 },
                 error:(error)=>{
                     console.log("error Data :",error);

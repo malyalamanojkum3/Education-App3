@@ -9,16 +9,54 @@ module.exports = cds.service.impl(function(){
         return Id;
     }
 
-    function Bulkvalidation(data){
-      const validRecords = data.filter((record, index) => {
-        if (!record.applicantName || !record.Id) {
-            console.warn(`Skipping row ${index + 1}: Missing required fields`);
-            return false;
+    function Bulkvalidation(data) {
+      const emailRegex =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const seenIds = new Set();
+      const validRecords = [];
+      const skippedRecords = [];
+  
+      data.forEach((record, index) => {
+          let errors = [];
+  
+          // column data validation
+          // applicantName validation
+        if (!record.applicantName) {
+          errors.push("Missing applicantName");
+        } else if (typeof record.applicantName !== "string") {
+            errors.push("applicantName must be a string");
         }
-        return true;
-    });
-    return validRecords;
-    }
+
+        // applicantEmail validation
+        if (!record.applicantEmail) {
+            errors.push("Missing applicantEmail");
+        } else if (!emailRegex.test(record.applicantEmail)) {
+            errors.push("Invalid applicantEmail format");
+        }
+  
+          // Duplicate check
+          if (record.applicantEmail && seenIds.has(record.applicantEmail)) {
+              errors.push("Duplicate Email");
+          }
+  
+          // Status check
+          if (record.loanStatus !== "Pending") {
+              errors.push("Status must be 'Pending'");
+          }
+  
+          if (errors.length > 0) {
+              skippedRecords.push({ ...record, row: index + 1, errors });
+          } else {
+              record.Id = customIdGenerator();
+              seenIds.add(record.applicantEmail);
+              validRecords.push(record);
+          }
+      });
+  
+      return {
+          validRecords,    // Only records that passed all checks
+          skippedRecords  // Records with errors
+      };
+  }
    
     const fs = require('fs');
     const path = require('path');
@@ -132,7 +170,9 @@ module.exports = cds.service.impl(function(){
             }
     
             const tx = cds.transaction(req);
-            const validRecords = Bulkvalidation(data);
+            const Records = Bulkvalidation(data);
+            const validRecords = Records.validRecords;
+            const skippedRecords = Records.skippedRecords;
             if (validRecords.length === 0) {
                 return req.error(400, 'No valid records found');
             }
@@ -142,9 +182,10 @@ module.exports = cds.service.impl(function(){
             
             return {
                 message: 'Records upload successful',
-                totalRecords: data.length,
-                insertedRecords: validRecords.length,
-                skippedRecords: data.length - validRecords.length
+                totalRecordsCount: data.length,
+                insertedRecordsCount: validRecords.length,
+                skippedRecordsCount: skippedRecords.length,
+                skippedRecords:skippedRecords
             };
             
         } catch (error) {
