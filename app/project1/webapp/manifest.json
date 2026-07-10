@@ -1,5 +1,5 @@
 {
-  "_version": "1.65.0",
+  "_version": "2.0.0",
   "sap.app": {
     "id": "project1",
     "type": "application",
@@ -43,7 +43,7 @@
     }
   },
   "sap.ui5": {
-    "flexEnabled": false,
+    "flexEnabled": true,
     "dependencies": {
       "minUI5Version": "1.136.1",
       "libs": {
@@ -87,9 +87,7 @@
         "transition": "slide",
         "type": "View",
         "viewType": "XML",
-        "path": "project1.view",
-        "async": true,
-        "viewPath": "project1.view"
+        "path": "project1.view"
       },
       "routes": [
         {
@@ -114,7 +112,7 @@
           ]
         },
         {
-          "name": "RouteloanApplication",
+          "name": "loanApplication",
           "pattern": "loanApplication",
           "target": [
             "TargetloanApplication"
@@ -177,8 +175,7 @@
     "rootView": {
       "viewName": "project1.view.App",
       "type": "XML",
-      "id": "App",
-      "async": true
+      "id": "App"
     }
   }
 }

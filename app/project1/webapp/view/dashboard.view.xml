@@ -18,7 +18,7 @@
         <Title text="Education Loan" class="headerTitleCentered" />
         </contentMiddle>
         <contentRight>
-          <Button id="logoutd" text="Logout" press="onLogout" class="mybuttonspacing" />
+          <Button id="logoutd" text="Logout" press=".onLogout" class="mybuttonspacing" />
         </contentRight>
       </Bar>
     </customHeader>
@@ -33,7 +33,7 @@
         class="sapUiMediumMargin dashboardGridLayout"
         customLayout="f:GridContainerSettings">
         
-        <f:GridListItem type="Active" press="onTilePress">
+        <f:GridListItem type="Active" press=".onTilePress">
           <VBox class="dashboardCard">
             <customData>
               <core:CustomData key="key" value="{key}" />
@@ -58,7 +58,7 @@
 
         
 
-        <f:GridListItem type="Active" press="onTilePress">
+        <f:GridListItem type="Active" press=".onTilePress">
           <VBox class="dashboardCard">
             <customData>
               <core:CustomData key="key" value="{key}" />

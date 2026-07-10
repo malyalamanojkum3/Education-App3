@@ -10,13 +10,13 @@
       <customHeader>
       <Bar design="Header" class="box">
        <contentLeft>
-       <Button id="homep" text="Home" press="onHome" class="mybuttonspacing"></Button>
+       <Button id="homep" text="Home" press=".onHome" class="mybuttonspacing"></Button>
       </contentLeft>
         <contentMiddle>
         <Title text="Education Loan" textAlign="Center" class=" headerTitleCentered" ></Title>
         </contentMiddle>
         <contentRight>
-          <Button id="logoutp" text="Logout" press="onLogout" class="mybuttonspacing"/>
+          <Button id="logoutp" text="Logout" press=".onLogout" class="mybuttonspacing"/>
         </contentRight>
       </Bar>
       

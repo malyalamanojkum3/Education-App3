@@ -43,6 +43,15 @@ sap.ui.define([
             oInput.setType(bIsPassword ? "Text" : "Password");
             oInput.setValueHelpIconSrc(bIsPassword ? "sap-icon://hide" : "sap-icon://show");
         },
+        onRegister: function () {
+            var oSignupBox = this.byId("signUpFields");
+            var oLoginBox = this.byId("loginfields");
+
+            if (oSignupBox && oLoginBox) {
+                oSignupBox.setVisible(false);
+                oLoginBox.setVisible(true);
+            }
+        },
         OnLoginbutton: function () {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("dashboard");

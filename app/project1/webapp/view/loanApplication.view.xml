@@ -13,13 +13,13 @@
      <customHeader>
       <Bar design="Header" class="box">
       <contentLeft>
-      <Button id="homeLA" text="Home" press="onHome" class="mybuttonspacing"></Button>
+      <Button id="homeLA" text="Home" press=".onHome" class="mybuttonspacing"></Button>
       </contentLeft>
         <contentMiddle>
         <Title text="Education Loan" class="headerTitleCentered" />
         </contentMiddle>
         <contentRight>
-          <Button id="logoutLA" text="Logout" press="onLogout" class="mybuttonspacing" />
+          <Button id="logoutLA" text="Logout" press=".onLogout" class="mybuttonspacing" />
         </contentRight>
       </Bar>
     </customHeader>
@@ -61,19 +61,19 @@
                 <VBox class="customMargin">
                 <HBox alignItems="Center">
                     <Label id="LAlabel3" text="Enter Applicant Mobile No"  required="true" class="customLabel"/>
-                    <Input id="enterApplicantMobileNo" placeholder="Enter Applicant Mobile No" liveChange="numValidation" class="customInput"/>
+                    <Input id="enterApplicantMobileNo" placeholder="Enter Applicant Mobile No" liveChange=".numValidation" class="customInput"/>
                 </HBox>
                 </VBox>
                 <VBox class="customMargin">
                 <HBox alignItems="Center">
                     <Label id="LAlabel4" text="Enter Applicant Email Id" required="true" class="customLabel"/>
-                    <Input id="enterEmailId" placeholder="Enter Applicant Email Id" liveChange="emailValidation"  class="customInput"/>
+                    <Input id="enterEmailId" placeholder="Enter Applicant Email Id" liveChange=".emailValidation"  class="customInput"/>
                     </HBox>
                 </VBox>
                 <VBox class="customMargin">
                 <HBox alignItems="Center">
                     <Label id="LAlabel5" text="Enter Aadhaar No" required="true" class="customLabel" />
-                    <Input id="enterAadhaarNo" placeholder="Enter Aadhaar No" liveChange="aadhaarValidation"  class="customInput" />
+                    <Input id="enterAadhaarNo" placeholder="Enter Aadhaar No" liveChange=".aadhaarValidation"  class="customInput" />
                 </HBox>
                 </VBox>
                 <VBox class="customMargin" id="LAbox3">
@@ -109,28 +109,28 @@
                 <VBox class="customMargin">
                 <HBox alignItems="Center">
                     <Label id="LAlabel6" text="Enter PAN No" required="true" class="customLabel"/>
-                    <Input id="enterPanNo" placeholder="Enter PAN No" liveChange="panValidation" class="customInput"/>
+                    <Input id="enterPanNo" placeholder="Enter PAN No" liveChange=".panValidation" class="customInput"/>
                 </HBox>
                 </VBox>
 
                 <VBox class="customMargin">
                 <HBox alignItems="Center">
                     <Label id="LAlabel7" text="Enter Salary" required="true" class="customLabel"/>
-                    <Input id="enterSalary" placeholder="Enter Salary" liveChange="salaryValidation"  class="customInput"/>
+                    <Input id="enterSalary" placeholder="Enter Salary" liveChange=".salaryValidation"  class="customInput"/>
                 </HBox>
                 </VBox>
 
                 <VBox class="customMargin">
                 <HBox alignItems="Center">
                     <Label text="Enter Loan Amount" required="true" class="customLabel" />
-                    <Input id="enterloanamount" placeholder="Enter Loan Amount" liveChange="loanamountValidation"  class="customInput"/>
+                    <Input id="enterloanamount" placeholder="Enter Loan Amount" liveChange=".loanamountValidation"  class="customInput"/>
                 </HBox>
                 </VBox>
 
                 <VBox class="customMargin">
                 <HBox alignItems="Center">
                     <Label id="LAlabel8" text="Enter Repayment Months" required="true" class="customLabel" />
-                    <Input id="enterloanrepaymentmonths" placeholder="Enter Loan Repayment Months" liveChange="repayValidation"  class="customInput"/>
+                    <Input id="enterloanrepaymentmonths" placeholder="Enter Loan Repayment Months" liveChange=".repayValidation"  class="customInput"/>
                 </HBox>
                 </VBox>
 
@@ -148,8 +148,8 @@
         <footer>
             <Toolbar id="LAtoolbar" class="sapUiSmallMargin">
                 <ToolbarSpacer id="LAtoolbarspacer" />
-                <Button id="LAbutton1" text="Submit" press="onSubmit" type="Emphasized" width="10%" class="customButton" />
-                <Button id="LAbutton2" text="Clear" press="onClear" type="Reject" width="10%" class="customButton" />
+                <Button id="LAbutton1" text="Submit" press=".onSubmit" type="Emphasized" width="10%" class="customButton" />
+                <Button id="LAbutton2" text="Clear" press=".onClear" type="Reject" width="10%" class="customButton" />
                 <ToolbarSpacer id="LAtoolbarspacer1" />
             </Toolbar>
         </footer>

@@ -93,14 +93,14 @@
       },
       "routes": [
         {
-          "name": "RouteView1",
-          "pattern": "RouteView1",
+          "name": "View1",
+          "pattern": "View1",
           "target": [
             "TargetView1"
           ]
         },
         {
-          "name": "dashboard",
+          "name": "Routedashboard",
           "pattern": ":?query:",
           "target": [
             "Targetdashboard"
@@ -114,7 +114,7 @@
           ]
         },
         {
-          "name": "RouteloanApplication",
+          "name": "loanApplication",
           "pattern": "loanApplication",
           "target": [
             "TargetloanApplication"

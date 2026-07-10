@@ -53,7 +53,7 @@ sap.ui.define([
 
       switch (key) {
         case "ApplyLoan":
-          router.navTo("RouteloanApplication");
+          router.navTo("loanApplication");
           break;
         case "LoanStatus":
           router.navTo("LoanStatusPage");

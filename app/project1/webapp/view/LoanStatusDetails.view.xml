@@ -11,7 +11,7 @@
       titleLevel="H2"
       class="sapUiContentPadding">
     <headerContent>
-      <Button text="Back" press="onNavBack"/>
+      <Button text="Back" press=".onNavBack"/>
     </headerContent>
     <content>
       <Title text="Application Status" level="H2" class="sapUiSmallMargin"/>

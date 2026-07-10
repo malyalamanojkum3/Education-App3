@@ -8,13 +8,13 @@
     <customHeader>
       <Bar design="Header" class="box">
       <contentLeft>
-      <Button  text="Home" press="onHome" class="mybuttonspacing"></Button>
+      <Button  text="Home" press=".onHome" class="mybuttonspacing"></Button>
       </contentLeft>
         <contentMiddle>
         <Title text="Education Loan" class="headerTitleCentered" />
         </contentMiddle>
         <contentRight>
-          <Button  text="Logout" press="onLogout" class="mybuttonspacing" />
+          <Button  text="Logout" press=".onLogout" class="mybuttonspacing" />
         </contentRight>
       </Bar>
     </customHeader>
@@ -26,23 +26,23 @@
     <contentRight>
     <OverflowToolbar id="filtersbar">
  
-<ComboBox id="statusComboBox" selectedKey="All" change="onStatusChange">
+<ComboBox id="statusComboBox" selectedKey="All" change=".onStatusChange">
  <core:Item key="All" text="All" />
  <core:Item key="Approved" text="Approved Loans" />
  <core:Item key="Pending" text="Pending Loans" />
  <core:Item key="Rejected" text="Rejected Loans" />
  </ComboBox>
 						<ToolbarSpacer/>
-						<SearchField id ="querySearch" liveChange="onSearch">
+						<SearchField id ="querySearch" liveChange=".onSearch">
 							<layoutData>
 							<OverflowToolbarLayoutData maxWidth="300px" shrinkable="true" priority="NeverOverflow"/></layoutData>
 						</SearchField>
-						<Button text="Reset" type="Transparent" press="onReset"/>
-						<OverflowToolbarButton tooltip="Sort" type="Transparent" text="Sort" icon="sap-icon://sort" press="onSort"/>
-						<OverflowToolbarButton tooltip="Group" id="GroupBy" type="Transparent" text="Group" icon="sap-icon://group-2" press="onGroup"/>
-						<OverflowToolbarMenuButton tooltip="Export" type="Transparent" text="Export" buttonMode="Split" icon="sap-icon://share" defaultAction="onDefaultActionAccept" beforeMenuOpen="onBeforeMenuOpen" useDefaultActionOnly="true">
+						<Button text="Reset" type="Transparent" press=".onReset"/>
+						<OverflowToolbarButton tooltip="Sort" type="Transparent" text="Sort" icon="sap-icon://sort" press=".onSort"/>
+						<OverflowToolbarButton tooltip="Group" id="GroupBy" type="Transparent" text="Group" icon="sap-icon://group-2" press=".onGroup"/>
+						<OverflowToolbarMenuButton tooltip="Export" type="Transparent" text="Export" buttonMode="Split" icon="sap-icon://share" defaultAction=".onDefaultActionAccept" beforeMenuOpen=".onBeforeMenuOpen" useDefaultActionOnly="true">
 							<menu>
-								<Menu itemSelected="onMenuAction">
+								<Menu itemSelected=".onMenuAction">
 									<MenuItem text="Export as PDF" icon="sap-icon://pdf-attachment" />
 									<MenuItem text="Export to Excel" icon="sap-icon://excel-attachment" />
 								</Menu>
@@ -101,7 +101,7 @@
 
 </HBox>
 <HBox id="_IDGenHBox" class="action">
-     <Button type="Default" text="View" press="onViewDetails" class="actionbuttonspacing"/>
+     <Button type="Default" text="View" press=".onViewDetails" class="actionbuttonspacing"/>
      
  </HBox>
                         </cells>
@@ -202,7 +202,7 @@ class="content"
      title="{mainModel>applicantName}"
      icon="sap-icon://attachment"
      type="Active"
-     press="onDocumentPress"
+     press=".onDocumentPress"
      />
  </List>
      </VBox>
@@ -213,13 +213,13 @@ class="content"
                 </HBox>
         </content>
      <buttons>
-     <Button type="Accept" text="Accept" press="onApproveLoan"
+     <Button type="Accept" text="Accept" press=".onApproveLoan"
     visible="{path: 'mainModel>loanStatus', formatter: '.isPending', targetType: 'any' }"
     class="actionbuttonspacing"/>  
-<Button type="Reject" text="Reject" press="onRejectLoan"
+<Button type="Reject" text="Reject" press=".onRejectLoan"
     visible="{path: 'mainModel>loanStatus', formatter: '.isPending',  targetType: 'any' }"
     class="actionbuttonspacing"/>
-<Button text="Close" press="onCloseDialog" />
+<Button text="Close" press=".onCloseDialog" />
 </buttons>
     </Dialog>
 </mvc:View>

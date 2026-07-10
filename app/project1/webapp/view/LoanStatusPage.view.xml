@@ -9,13 +9,13 @@
     <customHeader>
       <Bar design="Header" class="box">
        <contentLeft>
-       <Button id="homels" text="Home" press="onHome" class="mybuttonspacing"></Button>
+       <Button id="homels" text="Home" press=".onHome" class="mybuttonspacing"></Button>
       </contentLeft>
         <contentMiddle>
         <Title text="Education Loan" textAlign="Center" class=" headerTitleCentered" ></Title>
         </contentMiddle>
         <contentRight>
-          <Button id="logoutLS" text="Logout" press="onLogout" class="mybuttonspacing"/>
+          <Button id="logoutLS" text="Logout" press=".onLogout" class="mybuttonspacing"/>
         </contentRight>
       </Bar>
     </customHeader>
@@ -34,7 +34,7 @@
                     <Text text="Please enter your Loan Id  below to track your loan application."/>
                     <Label width="150%"/>
                     <Input id="Id" value="{ mainModel>/customer}" placeholder="Enter ID" textAlign="Center" required="false"/>
-                    <Button text="Track" press="onLoanStatusDetailsButton" class="PageButton"/>
+                    <Button text="Track" press=".onLoanStatusDetailsButton" class="PageButton"/>
                 </VBox>
             </Page>
  
